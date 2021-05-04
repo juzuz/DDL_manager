@@ -10,7 +10,11 @@ const windowHeight = Dimensions.get('window').height;
 export default function TaskScreen(props) {
 
     const dailyButtonHandler = () => {
-        props.navigation.navigate("NewTask")
+        props.navigation.navigate("NewTask", {type: 'daily'})
+    }
+
+    const generalButtonHandler = () => {
+        props.navigation.navigate("NewTask", {type:'general'})
     }
     return (
         <>
@@ -28,7 +32,7 @@ export default function TaskScreen(props) {
                         <Text style= {styles.buttonText}>Daily Task</Text>
                     </View>
                 </Button>
-                <Button large rounded style={styles.taskButton}>
+                <Button large rounded style={styles.taskButton} onPress={generalButtonHandler}>
                     <View style={styles.buttonContent}>
                         <Icon name='calendar' style={styles.icon2}/>
                         <Text style= {styles.buttonText}>One Time Task</Text>
