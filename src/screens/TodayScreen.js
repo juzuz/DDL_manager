@@ -2,12 +2,15 @@ import React,{ useEffect, useState} from 'react';
 import { Text, StyleSheet, StatusBar, View } from 'react-native';
 import { Icon, Button, Container, Header, Content, Left, Title, Body } from 'native-base';
 import { DrawerActions } from '@react-navigation/native';
-// import ToggleCalendar  from '../components/ToggleCalendar';
 import moment from 'moment';
 import Calendar from '../components/calendar/Calendar';
 import type Moment from 'moment';
 import Events from '../components/events/Events';
 import faker from 'faker';
+
+
+// import Setting from './SettingScreen';
+
 
 export type EventType = {
     date: Moment,
@@ -44,6 +47,10 @@ export default function TodayScreen(props) {
     useEffect(()=>{
         setEvents(FAKE_EVENTS)
     },[])
+
+    const pressHandler = () => {
+        props.navigation.navigate("Task");
+    }
    
     return (
         <>
@@ -72,7 +79,7 @@ export default function TodayScreen(props) {
                     </Content>
                 </Container>
             </Container>
-            <Button large rounded style={styles.taskButton} >
+            <Button large rounded style={styles.taskButton} onPress={pressHandler} >
                         <Icon name='add'></Icon>
                     </Button>
         </Container>
