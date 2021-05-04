@@ -111,14 +111,11 @@ export default function NewTaskScreen(props) {
     )
 }
 
-// 1e212a
+
 const styles = StyleSheet.create({
     container:{
         backgroundColor:'#1e212a',
         alignItems:'center'
-    },
-    header: {
-        backgroundColor: "#1e212a"
     },
     input:{
         backgroundColor:"#495867",
@@ -131,26 +128,12 @@ const styles = StyleSheet.create({
         textAlign:'center',
         fontWeight:'bold',
         fontSize:20,
-    },
-    taskButton:{
-        alignItems:'flex-start',
-        marginTop:10, 
-        justifyContent:'center',
-        flex:1,
-        borderRadius:5,
-        backgroundColor:'#495867',
-    },
+    }, 
     buttonText:{
         fontSize:21,
         fontWeight:'bold',
         color: '#E5E5F3',
     },
-   
-    buttonContent:{
-     flex:1,
-     flexDirection:'row'
-    },
-   
     buttonText:{
         fontSize:21,
         fontWeight:'bold',
@@ -162,14 +145,4 @@ const styles = StyleSheet.create({
         marginTop:20,
         alignItems:'center'
     },
-    title:{
-        
-        fontSize:24,
-        fontWeight:'normal'
-    },
-    bodyText:{
-        color:'white',
-        fontSize:24,
-        fontWeight:'normal'
-    }
 })

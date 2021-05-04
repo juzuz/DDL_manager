@@ -51,9 +51,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#1e212a',
         alignItems:'center'
     },
-    header: {
-        backgroundColor: "#1e212a"
-    },
+  
     buttonContent:{
      flex:1,
      flexDirection:'row'
@@ -86,14 +84,5 @@ const styles = StyleSheet.create({
         alignItems:'center',
         backgroundColor: "#1e212a"
     },
-    title:{
-        
-        fontSize:24,
-        fontWeight:'normal'
-    },
-    bodyText:{
-        color:'white',
-        fontSize:24,
-        fontWeight:'normal'
-    }
+
 })
