@@ -1,9 +1,50 @@
-import React from 'react';
-import {Text,View,StyleSheet, SafeAreaView,StatusBar} from 'react-native';
-import {Icon,Button,Container,Header,Content,Left,Title,Body} from 'native-base';
-import {DrawerActions} from '@react-navigation/native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import React,{ useEffect, useState} from 'react';
+import { Text, StyleSheet, StatusBar, View } from 'react-native';
+import { Icon, Button, Container, Header, Content, Left, Title, Body } from 'native-base';
+import { DrawerActions } from '@react-navigation/native';
+// import ToggleCalendar  from '../components/ToggleCalendar';
+import moment from 'moment';
+import Calendar from '../components/calendar/Calendar';
+import type Moment from 'moment';
+import Events from '../components/events/Events';
+import faker from 'faker';
+
+export type EventType = {
+    date: Moment,
+    title: string,
+    description: string,
+    image: string,
+  };
+
+  const FAKE_EVENTS: Array<EventType> = (() => {
+    const startDay = moment().subtract(5, 'days').startOf('day');
+    return [...new Array(64)].map(_ => ({
+      date: startDay.add(4, 'hours').clone(),
+      title: faker.company.companyName(),
+      description: faker.lorem.sentence(),
+      // use random dimensions to get random urls
+      image: faker.image.nightlife(Math.floor(Math.random() * 200) + 100, Math.floor(Math.random() * 200) + 100),
+    }));
+  })();
+
+  const filterEvents = (date: Moment): ?Array<EventType> =>
+  FAKE_EVENTS.filter(event => event.date.isSame(date, 'day'));
+
+
+ 
 export default function TodayScreen(props) {
+
+    const [events,setEvents] = useState([]);
+  
+
+    function onSelectDate (date: Moment)  {
+         setEvents(filterEvents(date))
+      };
+
+    useEffect(()=>{
+        setEvents(FAKE_EVENTS)
+    },[])
+   
     return (
         <>
         <StatusBar hidden={true}></StatusBar>
@@ -19,18 +60,21 @@ export default function TodayScreen(props) {
                     <Title style ={styles.title}>{props.route.name}</Title>
                 </Body>
             </Header>
-            <Content contentContainerStyle={{
-                flex:1,
-                alignItems:"center",
-                justifyContent:'center'
-            }}>
-            <Text style={styles.bodyText}>
-                TODAY SCREEN
-            </Text>
-            <Button large rounded style={styles.taskButton}>
-                <Icon name='add'></Icon>
-            </Button>
-            </Content>
+            <Calendar onSelectDate={() =>onSelectDate()}/>
+            <Container style={styles.eventCard}>
+                <Container style={styles.eventContainer}>
+                    <Content contentContainerStyle={{
+                        flex:1,
+                        margin:20
+                    }}>
+                <Events events={events} />
+                   
+                    </Content>
+                </Container>
+            </Container>
+            <Button large rounded style={styles.taskButton} >
+                        <Icon name='add'></Icon>
+                    </Button>
         </Container>
         </>
     )
@@ -39,7 +83,16 @@ export default function TodayScreen(props) {
 // 1e212a
 const styles = StyleSheet.create({
     container:{
-        backgroundColor:'#1e212a'
+        backgroundColor:'#1e212a',
+    },
+    eventContainer:{
+        backgroundColor:'#577399',
+        marginBottom:200,
+        borderRadius:25,
+    },
+    eventCard:{
+        backgroundColor:'#1e212a',
+        borderRadius:10
     },
     header: {
         backgroundColor: "#1e212a"

@@ -4,6 +4,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import type {Node} from 'react';
+import moment from 'moment'
 
 
 import TodayScreen from './src/screens/TodayScreen.js';
@@ -32,9 +33,10 @@ const App: () => Node = () => {
 };
 
 function MyDrawer() {
+  let today = moment().format('YYYY-MM-DD')
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name ="Today" component={TodayScreen}/>
+      <Drawer.Screen name ="Today" initialParams = {{'today':today}} component={TodayScreen}/>
       <Drawer.Screen name ="Template" component={TemplateScreen} />
     </Drawer.Navigator>
   )
