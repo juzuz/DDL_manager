@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Text,StyleSheet, SafeAreaView,StatusBar, Dimensions} from 'react-native';
+import {Text,StyleSheet, SafeAreaView,StatusBar, Dimensions, Alert} from 'react-native';
 import {Icon,Button,Container,Header,Content,Input,Title,Item} from 'native-base';
 import {DrawerActions} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -21,7 +21,7 @@ export default function NewTaskScreen(props) {
     }
 
     const taskNameHandler = (val) => {
-        setTaskName(val);
+	setTaskName(val); 
     }
 
     const priorityHandler = (val) => {
@@ -33,14 +33,32 @@ export default function NewTaskScreen(props) {
     }
 
     const submitHandler = () =>{
-        let data = {
-            task: taskName,
-            priority: priority,
-            ddl: dateString,
-            tag: tag,
-            type: props.route.params.type
-        }
-        console.log(data)
+	if (taskName === ""){
+		Alert.alert('Alert', 'Task name must not be empty');
+	}
+
+	else if (!(priority < 11 && priority > 0)){
+		Alert.alert('Alert', 'Priority must be within the range of [1,10]');
+	}
+
+	else if (tag === ""){
+		Alert.alert('Alert', 'Tag must not be empty');
+	}
+
+	else if (dateString === "Select your deadline date"){
+		Alert.alert('Alert', 'Please choose a date');
+	}
+
+	else {
+		let data = {
+            		task: taskName,
+            		priority: priority,
+            		ddl: dateString,
+            		tag: tag,
+            		type: props.route.params.type
+        	}
+		console.log(data)
+	}
     }
 
     return (
