@@ -26,7 +26,7 @@ export default function Routes() {
     
     return (
         <NavigationContainer>
-            {user ? <AppStack/> : <AuthStack />}
+            {user ? <AppStack user={user.uid}/> : <AuthStack />}
         </NavigationContainer>
     )
 }

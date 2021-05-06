@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import TodayScreen from '../screens/TodayScreen';
 import TaskScreen from '../screens/TaskScreen';
@@ -7,7 +7,10 @@ import NewTaskScreen from '../screens/NewTaskScreen';
 
 const Stack = createStackNavigator();
 
-export default function HomeStack() {
+export default function HomeStack(props) {
+
+   
+
     return (
         <Stack.Navigator 
         animation='fade'
@@ -15,8 +18,13 @@ export default function HomeStack() {
         }}
         >
             {/* Stack Navigation puts a header by default, we do not need it. */}
-            <Stack.Screen name="Today" component={TodayScreen} options={{headerShown: false}}/>
+            <Stack.Screen name="Today" 
+            component={TodayScreen} 
+            options={{headerShown: false}}
+            initialParams = {{user:props.route.params.user}}
+            />
             <Stack.Screen name='Task' component={TaskScreen} 
+            initialParams = {{user:props.route.params.user}}
             options={{
               headerTintColor:'#E5E5F3',
               headerStyle: {

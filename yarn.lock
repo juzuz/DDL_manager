@@ -1436,6 +1436,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-11.4.1.tgz"
   "version" "11.4.1"
 
+"@react-native-firebase/firestore@^11.4.1":
+  "integrity" "sha512-bptsAFRR5RbnsHnpRbJP8JVS1YugPtHOPS83ufESIInJvd7lVrWo3w6NJZmVbjIs696WVtN534J2zRRenACqxw=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-11.4.1.tgz"
+  "version" "11.4.1"
+
 "@react-native-picker/picker@^1.9.7":
   "integrity" "sha512-TYdhavldt3ami860fVgYv2mf0d1u5YhMQ6kTw+soX/a1rYbpRCRjdz01sEQXwCW8oL7/lzHakOFnwqCo6JazDw=="
   "resolved" "https://registry.npmjs.org/@react-native-picker/picker/-/picker-1.15.0.tgz"

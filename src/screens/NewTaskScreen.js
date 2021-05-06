@@ -1,23 +1,37 @@
 import React, { useState } from 'react';
-import {Text,StyleSheet, SafeAreaView,StatusBar, Dimensions} from 'react-native';
-import {Icon,Button,Container,Header,Content,Input,Title,Item} from 'native-base';
+import {Text,View,StyleSheet, SafeAreaView,StatusBar, Dimensions,Alert} from 'react-native';
+import {Icon,Button,Container,Header,Content,Input,Item} from 'native-base';
 import {DrawerActions} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from 'moment';
-import { TapGestureHandler } from 'react-native-gesture-handler';
+import moment from 'moment-timezone';
+import firestore from '@react-native-firebase/firestore';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function NewTaskScreen(props) {
     const [calendarVisable, setCalendarVisible] = useState(false);
-    const [dateString, setDateString] = useState("Select your deadline date");
+    const [date,setDate] = useState("");
+    const [dateString, setDateString] = useState("Select your deadline");
     const [taskName, setTaskName] = useState("");
     const [priority, setPriority] = useState(0);
     const [tag,setTag] = useState("");
+    const [mode,setMode] = useState("date");
 
-    const dateHandler = (e,date) => {
-        setCalendarVisible(false)
-        setDateString(moment(date).format('YYYY-MM-DD'))
+    const dateHandler = (event,val) => {
+        if (mode === 'date') {
+            setCalendarVisible(false);
+            setDate(moment(val).startOf('day'))
+            setDateString(moment(val).format('MMM, DD, YYYY'))
+        }
+        else{
+            setCalendarVisible(false);
+            let hour = parseInt(moment(val).format('HH'));
+            let min = parseInt(moment(val).format('mm'));
+            let newDate = moment(date).startOf('day').add(hour,'h').add(min,'minute');
+            setDate(newDate);
+            setDateString(newDate.format("MMM, DD, YYYY h:mm a"))
+        }
     }
 
     const taskNameHandler = (val) => {
@@ -32,15 +46,55 @@ export default function NewTaskScreen(props) {
         setTag(val)
     }
 
-    const submitHandler = () =>{
-        let data = {
-            task: taskName,
-            priority: priority,
-            ddl: dateString,
-            tag: tag,
-            type: props.route.params.type
+    const showDatePicker = () => {
+        showMode('date');
+    }
+
+    const showTimePicker = () => {
+        showMode('time')
+    }
+
+    const showMode= (currentMode) => {
+        setCalendarVisible(true);
+        setMode(currentMode);
+    }
+
+    const submitHandler = async() =>{
+        let valid = false;
+        if (taskName === ""){
+            Alert.alert('Alert', 'Task name must not be empty');
         }
-        console.log(data)
+    
+        else if (!(priority < 11 && priority > 0)){
+            Alert.alert('Alert', 'Priority must be within the range of [1,10]');
+        }
+    
+        else if (tag === ""){
+            Alert.alert('Alert', 'Tag must not be empty');
+        }
+    
+        else if (dateString === "Select your deadline"){
+            Alert.alert('Alert', 'Please choose a date');
+        }
+        else{
+            valid = true;
+        }
+
+        if (valid){
+            let user = props.route.params.user;
+            let dateTime = moment(date).toDate()
+            let data = {
+                task: taskName,
+                priority: priority,
+                ddl: firestore.Timestamp.fromDate(dateTime),
+                tag: tag,
+                type: props.route.params.type
+            }
+    
+            const res = await firestore().collection(user).doc().set(data)
+            props.navigation.popToTop();
+        }
+      
     }
 
     return (
@@ -50,7 +104,6 @@ export default function NewTaskScreen(props) {
             
             <Content contentContainerStyle={{
                 
-                // justifyContent:'center'
             }}>
             <Container style={styles.card}>
         
@@ -81,8 +134,19 @@ export default function NewTaskScreen(props) {
                     placeholder='Type Tag'
                     />
                 </Item>
-                <Item style={{borderBottomWidth:0,marginTop:10}}>
-                    <Text style={styles.buttonText} onPress={() => setCalendarVisible(true)}>{dateString}</Text>
+              
+                <Item style={{borderBottomWidth:0, marginTop:10}}>
+                    <View style = {{flex:1, flexDirection:'row'}}>
+                        <View style = {{backgroundColor:'#495867', justifyContent:'center'}}>
+                            <Text style={{marginRight:10, marginLeft:10, color:'white',fontSize:18,fontWeight:'bold'}}>{dateString}</Text>
+                        </View>
+                        <Button style ={{marginLeft:10 }} onPress ={showDatePicker}>
+                            <Icon name ='calendar' />
+                        </Button>
+                        <Button style ={{marginLeft:10 }}onPress ={showTimePicker}>
+                            <Icon name='time'/>
+                        </Button>
+                    </View>
                 </Item>
                 
                 <Item style={{borderBottomWidth:0,marginTop:10}}>
@@ -96,7 +160,7 @@ export default function NewTaskScreen(props) {
                     calendarVisable && (
                         <DateTimePicker
                         value={new Date()}
-                        mode='date'
+                        mode={mode}
                         onChange={dateHandler}
                         minimumDate={new Date()}
                         />
