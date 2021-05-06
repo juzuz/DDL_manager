@@ -51,15 +51,17 @@ export default function TodayScreen(props) {
         // TODO 
         // Here are the new events to work on
         firestore().collection(props.route.params.user).onSnapshot((snapshot)=>{
-            const newTasks = snapshot.docs.map((doc)=>({
-                id:doc.id,
-                ...doc.data()
-            }))
-
-            setTasks(newTasks)
+            if(snapshot){
+                const newTasks = snapshot.docs.map((doc)=>({
+                    id:doc.id,
+                    ...doc.data()
+                }))
+    
+                setTasks(newTasks)
+            }
+            
         })
 
-        console.log(tasks)
     },[])
 
     const pressHandler = () => {
