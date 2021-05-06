@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {Text,View,StyleSheet, SafeAreaView,StatusBar, Dimensions,Alert} from 'react-native';
 import {Icon,Button,Container,Header,Content,Input,Item} from 'native-base';
+
 import {DrawerActions} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
@@ -35,7 +36,7 @@ export default function NewTaskScreen(props) {
     }
 
     const taskNameHandler = (val) => {
-        setTaskName(val);
+	      setTaskName(val); 
     }
 
     const priorityHandler = (val) => {
@@ -94,7 +95,6 @@ export default function NewTaskScreen(props) {
             const res = await firestore().collection(user).doc().set(data)
             props.navigation.popToTop();
         }
-      
     }
 
     return (
