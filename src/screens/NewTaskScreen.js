@@ -10,6 +10,23 @@ import firestore from '@react-native-firebase/firestore';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+//function to calculate next reminder time
+function reminder(data){
+	//placeholders
+	var completeHistory = 0;
+	var historyTime = 0;
+	var importanceScore = 0;
+
+	if (data.type == 'daily'){
+		importanceScore = 0.2 * data.priority + 0.4 * (1-completeHistory) + 0.4 * historyTime;
+	}
+
+	else {
+		importanceScore = 0.25 * data.priority + 0.25 * (1-completeHistory) + 0.5 * historyTime;
+		
+	}
+	console.log("importanceScore = " + importanceScore);
+}
 export default function NewTaskScreen(props) {
     const [calendarVisable, setCalendarVisible] = useState(false);
     const [date,setDate] = useState("");
@@ -92,6 +109,7 @@ export default function NewTaskScreen(props) {
                 type: props.route.params.type
             }
     
+	    reminder(data)
             const res = await firestore().collection(user).doc().set(data)
             props.navigation.popToTop();
         }
