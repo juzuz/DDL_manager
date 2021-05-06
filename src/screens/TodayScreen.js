@@ -3,6 +3,7 @@ import { Text, StyleSheet, StatusBar, View } from 'react-native';
 import { Icon, Button, Container, Header, Content, Left, Title, Body } from 'native-base';
 import { DrawerActions } from '@react-navigation/native';
 import moment from 'moment';
+import firestore from '@react-native-firebase/firestore';
 import Calendar from '../components/calendar/Calendar';
 import type Moment from 'moment';
 import Events from '../components/events/Events';
@@ -38,14 +39,27 @@ export type EventType = {
 export default function TodayScreen(props) {
 
     const [events,setEvents] = useState([]);
-  
+    
+    const [tasks,setTasks] = useState([]);
 
     function onSelectDate (date: Moment)  {
          setEvents(filterEvents(date))
       };
 
     useEffect(()=>{
-        setEvents(FAKE_EVENTS)
+        setEvents(FAKE_EVENTS);
+        // TODO 
+        // Here are the new events to work on
+        firestore().collection(props.route.params.user).onSnapshot((snapshot)=>{
+            const newTasks = snapshot.docs.map((doc)=>({
+                id:doc.id,
+                ...doc.data()
+            }))
+
+            setTasks(newTasks)
+        })
+
+        console.log(tasks)
     },[])
 
     const pressHandler = () => {

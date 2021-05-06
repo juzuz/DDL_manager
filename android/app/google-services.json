@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1074827539599",
+    "project_id": "ddlmanager-63ddd",
+    "storage_bucket": "ddlmanager-63ddd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1074827539599:android:079e309d12e1aa9695acfa",
+        "android_client_info": {
+          "package_name": "com.ddl_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1074827539599-fh6aaoaet44mgkhb45c9sjcss5jvk98v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwxOSrKk9g23BuI7DMED7KEsTVoIe25u8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1074827539599-fh6aaoaet44mgkhb45c9sjcss5jvk98v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
