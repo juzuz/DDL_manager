@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import {Text,View,StyleSheet, SafeAreaView,StatusBar, Dimensions,Alert} from 'react-native';
+import {Text,View, StyleSheet, SafeAreaView, StatusBar, Dimensions, Alert} from 'react-native';
 import {Icon,Button,Container,Header,Content,Input,Item} from 'native-base';
 
 import {DrawerActions} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import firestore from '@react-native-firebase/firestore';
+import NotifService from '../components/notifications/NotifService';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -27,7 +28,7 @@ function score(data){
 }
 
 //function to setup notifications
-function reminder(importanceScore, data){
+function reminder(notif, importanceScore, data){
 	let hour = parseInt(moment().format('HH'));
         let min = parseInt(moment().format('mm'));
         let date = moment().startOf('day').add(hour,'h').add(min,'minute');
@@ -37,11 +38,26 @@ function reminder(importanceScore, data){
 	var remainTime = data.ddl - currTime;
 	var count = Math.ceil(importanceScore * 10);
 	var timeSlice = remainTime / count;
-
+	notif.scheduleNotif('sample.mp3', 5);
+	notif.localNotif();
 	console.log("timeSlice = " + timeSlice);
 }
 
 export default function NewTaskScreen(props) {
+    const [registerToken, setRegisterToken] = useState(null);
+    const [fcmRegistered, setFcmRegistered] = useState(false);
+	
+    const onRegister = (token) => {
+    	setRegisterToken(token.token);
+	setFcmRegistered(true)
+    }
+
+    const onNotif = (notif) => {
+    	Alert.alert(notif.title, notif.message);
+    }
+
+    var notif = new NotifService(onRegister, onNotif);
+
     const [calendarVisable, setCalendarVisible] = useState(false);
     const [date,setDate] = useState("");
     const [dateString, setDateString] = useState("Select your deadline");
@@ -125,7 +141,7 @@ export default function NewTaskScreen(props) {
     	    
 	    
 	    var importantScore = score(data)
-	    reminder(importantScore, data)
+	    reminder(notif, importantScore, data)
 
             const res = await firestore().collection(user).doc().set(data)
             props.navigation.popToTop();
