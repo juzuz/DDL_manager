@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import TodayScreen from '../screens/TodayScreen';
 import TaskScreen from '../screens/TaskScreen';
 import NewTaskScreen from '../screens/NewTaskScreen';
-
+import Loader from '../components/Loader';
 
 const Stack = createStackNavigator();
 
@@ -12,6 +12,7 @@ export default function HomeStack(props) {
    
 
     return (
+     
         <Stack.Navigator 
         animation='fade'
         screenOptions={{
