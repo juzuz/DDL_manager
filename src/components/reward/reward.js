@@ -11,3 +11,10 @@ function reward(data){
 	var completeTime = firestore.Timestamp.fromDate(moment().toDate());
 	return a * data.importanceScore + b * (completeTime - data.startTime) / (data.ddl - data.startTime);
 }
+
+//code below is to store the reward into the DB
+let user = props.route.params.user;
+let data = {
+                reward: reward,
+            }
+const res = await firestore().collection("reward").doc(user).set(data)
