@@ -1,4 +1,4 @@
-import React, { useContext, useState} from 'react';
+import React, { useContext, useState, useEffect} from 'react';
 import {Text,View,StyleSheet,StatusBar, Dimensions} from 'react-native';
 import {Icon,Button,Container,Content,Form,Item,Input, Title} from 'native-base';
 import { AuthContext } from '../navigation/AuthProvider';
@@ -31,7 +31,7 @@ export default function LoginScreen(props) {
     const registerHandler = () => {
         props.navigation.navigate("Register")
     }
-    
+
     return (
         <>
         <StatusBar hidden={true}></StatusBar>

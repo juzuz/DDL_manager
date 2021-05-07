@@ -8,8 +8,7 @@ import Calendar from '../components/calendar/Calendar';
 import type Moment from 'moment';
 import Events from '../components/events/Events';
 import faker from 'faker';
-
-
+import Loader from '../components/Loader'
 // import Setting from './SettingScreen';
 
 
@@ -39,14 +38,22 @@ export type EventType = {
 export default function TodayScreen(props) {
 
     const [events,setEvents] = useState([]);
-    
+    const [loading, setLoading] = useState(true);
     const [tasks,setTasks] = useState([]);
 
     function onSelectDate (date: Moment)  {
          setEvents(filterEvents(date))
       };
 
+    useEffect(() => {
+        setTimeout(()=>{
+            setLoading(false)
+        },2000)
+       
+    }, [props.route.params.user])
+
     useEffect(()=>{
+        setLoading(true);
         setEvents(FAKE_EVENTS);
         // TODO 
         // Here are the new events to work on
@@ -70,6 +77,7 @@ export default function TodayScreen(props) {
    
     return (
         <>
+        {loading ? <Loader visible ={loading}/>: <>
         <StatusBar hidden={true}></StatusBar>
         <Container style={styles.container}>
             <Header style={styles.header}>
@@ -100,6 +108,8 @@ export default function TodayScreen(props) {
                     </Button>
         </Container>
         </>
+    }
+    </>
     )
 }
 
