@@ -37,9 +37,22 @@ function reminder(notif, importanceScore, data){
 	console.log(currTime);
 	var remainTime = data.ddl - currTime;
 	var count = Math.ceil(importanceScore * 10);
-	var timeSlice = remainTime / count;
-	notif.scheduleNotif('sample.mp3', 5);
-	notif.localNotif();
+	
+	//if the ddl is already passed, remind in 5 minutes for once
+	if (remainTime <= 0) {
+		timeSlice = 300;
+		count = 1;
+	}
+	
+	else {
+		var timeSlice = remainTime / count;
+	}
+
+	//schedule count no. of notif evenly
+	for (var i = 1; i <= count; i++){
+		notif.scheduleNotif('sample.mp3', timeSlice * i, data);
+	}
+	
 	console.log("timeSlice = " + timeSlice);
 }
 
