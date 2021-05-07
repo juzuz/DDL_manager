@@ -149,11 +149,13 @@ export default function NewTaskScreen(props) {
                 priority: priority,
                 ddl: firestore.Timestamp.fromDate(dateTime),
                 tag: tag,
-                type: props.route.params.type
+                type: props.route.params.type,
+		startTime: firestore.Timestamp.fromDate(moment().toDate())
             }
     	    
 	    
 	    var importantScore = score(data)
+	    data.importantScore = importantScore;
 	    reminder(notif, importantScore, data)
 
             const res = await firestore().collection(user).doc().set(data)
