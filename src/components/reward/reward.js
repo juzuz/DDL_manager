@@ -17,4 +17,4 @@ let user = props.route.params.user;
 let data = {
                 reward: reward,
             }
-const res = await firestore().collection("reward").doc(user).set(data)
+const res = await firestore().collection("stats").doc(user).set(data)
