@@ -8,8 +8,7 @@ import Calendar from '../components/calendar/Calendar';
 import type Moment from 'moment';
 import Events from '../components/events/Events';
 import faker from 'faker';
-import Loader from '../components/Loader';
-
+import Loader from '../components/Loader'
 // import Setting from './SettingScreen';
 
 
