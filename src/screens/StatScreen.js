@@ -9,30 +9,12 @@ const windowHeight = Dimensions.get('window').height;
 export default function StatScreen(props) {
 
     const [stats,setStats] = useState({});
-    const getUserStats = (user) => {
-        return firestore().collection('stats').doc(user);
-    }
-
+  
     useEffect(() => {
-        const docRef = getUserStats(props.route.params.user)
-        let exists = false;
-        docRef.get().then((doc) => {
-            if(doc.exists){
-                setStats(doc.data())
-                exists = true;
-            }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-        });
-
-        if (!exists){
-            docRef.set({
-                user:props.route.params.user,
-                completeHistory:1,
-                numTask:0
-            })
-        }
-    }, [])
+        setStats(props.route.params.stats)
+        console.log(props.route.params)
+    }, [props.route.params.stats])
+  
 
     return (
         <>
@@ -68,9 +50,6 @@ export default function StatScreen(props) {
                 <View style ={styles.statistic}>
 
                 </View>
-            {/* <Text style={styles.bodyText}>
-                {stats.completeHistory} {stats.numTask}
-            </Text> */}
             
             </Content>
         </Container>
