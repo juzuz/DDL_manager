@@ -41,6 +41,7 @@ export default function TodayScreen(props) {
     const [displayDaily,setDisplayDaily] = useState([]);
     const [loading, setLoading] = useState(true);
     const [tasks,setTasks] = useState([]);
+    const [selectedDate,setSelectedDate] = useState(moment());
 
     const filterGeneralEvents = (taskArray,date: Moment): ?Array<EventType> =>
     taskArray.filter(event => (moment(event.ddl).isSame(date, 'day') && event.type === 'general'));
@@ -49,8 +50,9 @@ export default function TodayScreen(props) {
     taskArray.filter(event => (event.type === 'daily'));
 
     function onSelectDate (date: Moment)  {
-        setDisplayGeneral(filterGeneralEvents(tasks,date))
-        setDisplayDaily(filterDailyEvents(tasks,date))
+        setSelectedDate(date);
+        setDisplayGeneral(filterGeneralEvents(tasks,date));
+        setDisplayDaily(filterDailyEvents(tasks,date));
       };
 
     const formatTasks = (tasks) => {
@@ -113,13 +115,14 @@ export default function TodayScreen(props) {
                 </Body>
             </Header>
             <Calendar onSelectDate={(date) =>onSelectDate(date)}/>
+
             <Container style = {{flex:1}}>
             <Container style={styles.generalEvents}>
                 <Container style={styles.generalContainer}>
                     <Title style={styles.taskTitle}>General Tasks</Title>
                     <Content contentContainerStyle={{
                     }}>
-                        <Events events={displayGeneral} user = {props.route.params.user}/>
+                        <Events events={displayGeneral} user = {props.route.params.user} selectedDate={ selectedDate}/>
                     </Content>
                 </Container>
             </Container>
@@ -128,7 +131,7 @@ export default function TodayScreen(props) {
                 <Container style={styles.dailyContainer}>
                     <Title style={styles.taskTitle}>Daily Tasks</Title>
                     <Content>
-                        <Events events={displayDaily} user = {props.route.params.user} />
+                        <Events events={displayDaily} user = {props.route.params.user} selectedDate={selectedDate}/>
                     </Content>
                 </Container>
             </Container>

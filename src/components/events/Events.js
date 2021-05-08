@@ -53,7 +53,6 @@ export default class Events extends Component {
       let totalComp = sH.completedTask+1;
       let cH =totalComp/(totalComp + sH.incompletedTask)
 
-      
       taskRef.update({complete:!completionStatus})
       statRef.update({completedTask:totalComp,reward:sH.reward + reward, completeHistory:cH})
     }
@@ -84,6 +83,7 @@ export default class Events extends Component {
   render() {
     const { events } = this.props;
     const {user} = this.props;
+    const {selectedDate} = this.props;
     const {leftActionActivated,rightActionActivated} = this.state
 
     const leftContent = <View style={styles.leftSwipeItem}>
@@ -109,6 +109,7 @@ export default class Events extends Component {
         <ScrollView>
           {events && events.map((event, index) =>
             <Swipeable 
+            disable = {(event.type === 'daily' && moment().isSame(selectedDate,'day')) ? false:true}
             leftActionActivationDistance ={150}
             rightActionActivationDistance = {150}
             leftContent={leftContent} 
