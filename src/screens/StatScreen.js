@@ -15,6 +15,8 @@ export default function StatScreen(props) {
 
 
     useEffect(() => {
+        if(props.route.params.user){
+
         const docRef = getUserStats(props.route.params.user);
         let exists = false;
         docRef.onSnapshot((snapshot)=> {
@@ -26,6 +28,7 @@ export default function StatScreen(props) {
                 exists = true;
             }
         })
+    }
     }, [])
 
     return (

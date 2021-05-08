@@ -77,7 +77,7 @@ export default function TodayScreen(props) {
 
     useEffect(()=>{
         setLoading(true);
-
+        if(props.route.params.user){
         firestore().collection(props.route.params.user).onSnapshot((snapshot)=>{
             if(snapshot){
                 const newTasks = snapshot.docs.map((doc)=>({
@@ -89,7 +89,7 @@ export default function TodayScreen(props) {
                 setDisplayDaily(filterDailyEvents(formatTasks(newTasks),moment()))
             }
         })
-
+    }
     },[])
 
     const pressHandler = () => {
