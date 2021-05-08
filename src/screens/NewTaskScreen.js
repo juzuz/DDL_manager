@@ -166,7 +166,9 @@ export default function NewTaskScreen(props) {
                     tag: tag,
                     type: taskType,
                     startTime: firestore.Timestamp.fromDate(moment().toDate()),
-                    complete: false
+                    complete: false,
+		    //used to ensure only marking incompleted task once 
+		    markAsIncompleted: false
                 }
             }
     	 
