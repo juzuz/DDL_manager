@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Text,View, StyleSheet, SafeAreaView, StatusBar, Dimensions, Alert} from 'react-native';
+import {Text,View, StyleSheet, SafeAreaView, StatusBar, Dimensions, Alert, FlatList, TouchableOpacity} from 'react-native';
 import {Icon,Button,Container,Header,Content,Input,Item} from 'native-base';
 
 import {DrawerActions} from '@react-navigation/native';
@@ -77,6 +77,7 @@ export default function NewTaskScreen(props) {
     const [priority, setPriority] = useState(0);
     const [tag,setTag] = useState("");
     const [mode,setMode] = useState("date");
+    const [selectedId, setSelectedId] = useState(null);
 
     const dateHandler = (event,val) => {
         if (mode === 'date') {
@@ -182,6 +183,41 @@ export default function NewTaskScreen(props) {
 
         }
     }
+//list of tags
+const DATA = [
+  {
+    id: "1",
+    title: "Sports",
+  },
+  {
+    id: "2",
+    title: "Study",
+  },
+  {
+    id: "3",
+    title: "Entertainment",
+  },
+];
+const Item1 = ({ item, onPress, backgroundColor, textColor }) => (
+  <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
+    <Text style={[styles.title, textColor]}>{item.title}</Text>
+  </TouchableOpacity>
+);
+
+const renderItem = ({ item }) => {
+    const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
+    const color = item.id === selectedId ? 'white' : 'black';
+
+    return (
+      <Item1
+        item={item}
+        //onPress={() => setSelectedId(item.id), setTag(item.id)}
+	onPress={() => setTag(item.id)}
+        backgroundColor={{ backgroundColor }}
+        textColor={{ color }}
+      />
+    );
+  };
 
     return (
         <>
@@ -211,15 +247,15 @@ export default function NewTaskScreen(props) {
                         placeholder='Type Priority (1-10)'
                         />
                 </Item>
-                <Item style={{borderBottomWidth:0}}>
-                    <Input 
-                    onChangeText ={(val) => tagHandler(val)}
-                    underlineColorAndroid="transparent" 
-                    placeholderTextColor='white'  
-                    style={styles.input} 
-                    placeholder='Type Tag'
-                    />
-                </Item>
+		<Item>
+      		     <FlatList
+        		data={DATA}
+			style={styles.item} 
+        		renderItem={renderItem}
+        		keyExtractor={(item) => item.id}
+        		extraData={selectedId}
+      			/>
+    		</Item>
 
                 {(props.route.params.type === 'daily') ? null:
                 <Item style={{borderBottomWidth:0, marginTop:10}}>
@@ -295,5 +331,13 @@ const styles = StyleSheet.create({
         width:windowWidth*0.94,
         marginTop:20,
         alignItems:'center'
+    },
+    item:{
+	padding: 20,
+    	marginVertical: 8,
+    	marginHorizontal: 16,
+    },
+    title: {
+    	fontSize: 32,
     },
 })
