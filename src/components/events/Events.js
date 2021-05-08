@@ -1,5 +1,5 @@
 // @flow
-//New
+
 import React, { Component } from 'react';
 import Swipeable  from 'react-native-swipeable-row';
 import {
@@ -41,31 +41,50 @@ export default class Events extends Component {
     stats:{}
   }
 
-  rightSwipeHandler(user,event){
+  rightSwipeHandler = async(user,event) =>{
     const taskRef = firestore().collection(user).doc(event.id);
     const statRef = firestore().collection('stats').doc(user);
 
     //TODO
     
     let completionStatus = event.complete
+    console.log(completionStatus)
+
     if (!completionStatus){
       let reward = 0;
-        taskRef.get().then((doc)=>{
-          if(doc.exists){ 
-            reward = event.type==='daily'?doc.data().reward: calcReward(event)
-            let sH = this.state.stats;
-            let totalComp = sH.completedTask+1;
-            let cH =totalComp/(totalComp + sH.incompletedTask)
-            console.log(reward)
-
-            taskRef.update({complete:!completionStatus})
-            statRef.update({completedTask:totalComp,reward:sH.reward + reward, completeHistory:cH})
-
-          }
-        })
+      taskRef.get().then((doc)=>{
+        if(doc.exists){ 
+          reward = event.type==='daily'?doc.data().reward: calcReward(event)
+          let sH = this.state.stats;
+          let totalComp = sH.completedTask+1;
+          let cH =totalComp/(totalComp + sH.incompletedTask)
+          taskRef.update({complete:!completionStatus,reward:reward})
+          statRef.update({completedTask:totalComp,reward:sH.reward + reward, completeHistory:cH})
+        }
+      })
     }
     else{
-      taskRef.update({complete:!completionStatus})
+      let reward = -1;
+      taskRef.get().then((doc)=>{
+        if(doc.exists){ 
+          reward =  doc.data().reward
+          let sH = this.state.stats;
+          let totalComp = sH.completedTask-1;
+          let cH =1
+          totalComp === 0 ? ch =1: ch = totalComp/(totalComp + sH.incompletedTask);
+         
+
+          statRef.update({completedTask:totalComp,reward:sH.reward - reward, completeHistory:cH})
+          if(event.type==='daily'){
+            taskRef.update({complete:!completionStatus,reward:reward})
+          }
+          else{
+            taskRef.update({complete:!completionStatus,reward:0})
+          }
+        }
+      })
+
+      taskRef.update({complete:!completionStatus,})
 
     }
 
@@ -134,7 +153,7 @@ export default class Events extends Component {
             onRightActionRelease={() => this.rightSwipeHandler(user,event)}
             onRightActionDeactivate={() => this.setState({rightActionActivated: false})}
             >
-              <Event event={event} key={index} />
+              <Event event={event} key={index} selectedDate = {selectedDate}/>
             </Swipeable>)}
         </ScrollView>
       </View>

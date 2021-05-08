@@ -17,7 +17,7 @@ export default class Event extends Component {
   };
 
   render() {
-    const { event } = this.props;
+    const { event ,selectedDate} = this.props;
     const {
       ddl,
       task,
@@ -30,7 +30,7 @@ export default class Event extends Component {
     } = event;
     return (
       <>
-      {!ddl.isSame(moment(),'day') && complete?
+      {(type === 'general' && complete ) || (complete &&selectedDate.isSame(moment(),'day') )?
       <View style={styles.containerComplete}>
         <View style={styles.textContainer}>
           <Text style={styles.text}>{ddl.format()}</Text>
