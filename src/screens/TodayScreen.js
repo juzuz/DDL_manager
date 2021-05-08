@@ -43,21 +43,28 @@ function checkIncomplete(props) {
         	let date = moment().startOf('day').add(hour,'h').add(min,'minute');
 		var currTime = moment(date).toDate()
 		currTime = firestore.Timestamp.fromDate(currTime)
-		//if the ddl is over and it's not completed
-		// console.log(doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted);
-		if (doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted){
-			// console.log("enter if incomplete");
-			firestore().collection(props.route.params.user).doc(doc.id).update({markAsIncompleted:true});
+		//for general tasks
+		if (doc.data().type === 'general') {
+			//if the ddl is over and it's not completed
+			// console.log(doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted);
+			if (doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted){
+				// console.log("enter if incomplete");
+				firestore().collection(props.route.params.user).doc(doc.id).update({markAsIncompleted:true});
 			
-			const statRef = firestore().collection('stats').doc(props.route.params.user);
-			statRef.get().then((doc) => {
-				if (doc.exists) {
-        				let inNo = doc.data().incompletedTask + 1;
-					statRef.update({incompletedTask:inNo});
-					// console.log("total incomplete tasks no. = " + inNo);
-					// console.log(doc.id, " => ", doc.data().ddl);
-    				}
-			});
+				const statRef = firestore().collection('stats').doc(props.route.params.user);
+				statRef.get().then((doc) => {
+					if (doc.exists) {
+        					let inNo = doc.data().incompletedTask + 1;
+						statRef.update({incompletedTask:inNo});
+						// console.log("total incomplete tasks no. = " + inNo);
+						// console.log(doc.id, " => ", doc.data().ddl);
+    					}
+				});
+			
+			}
+		}
+		//for daily tasks
+		else {
 			
 		}
     	});
