@@ -16,7 +16,19 @@ export default function AppStack(props) {
     const [tasks,setTasks] = useState(null)
     const [stats,setStats] = useState(null)
 
- 
+    useEffect(() => {
+        let statRef = firestore().collection('stats').doc(props.user);
+        statRef.get().then(doc=>{
+            if (!doc.exits){
+                statRef.set({
+                    completeHistory:1,
+                    completedTask:0,
+                    incompletedTask:0,
+                    reward:0
+                })
+            }
+        })
+    }, [])
 
     return (
         <>

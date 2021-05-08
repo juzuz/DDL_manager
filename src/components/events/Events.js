@@ -45,37 +45,20 @@ export default class Events extends Component {
     const statRef = firestore().collection('stats').doc(user);
 
     //TODO
-    // The completion status is toggable back and forth.
-    // So if completed was true, and we toggle, that means we are deleting, 
-    // we need to subtract reward and return the cH back to the original amount:
-    // completionHistory = completedTask + incompletedTask / newtotal
-    // To revert it, we get completedTask -1 + incompletedTask / newTotal
-
-    // PROBLEM:
-    // THE REWARD ADDS UP WELL, when we complete a task, the reward can correctly cumilate,
-    // but for some reason, the completedtask amount doesn't change.
-    // This is probably because the reward amount is calculated, but the completedTask amount is retrieved
-    // from the database. We need realtime data, therefore i tried doing that in the componedDidMount function
-    // But for some reason, it is still not real time.
+    
     let completionStatus = event.complete
     if (!completionStatus){
-      // FROM INCOMPLETE TO COMPLETE
       let reward = calcReward(event);
       let sH = this.state.stats;
       let totalComp = sH.completedTask+1;
       let cH =totalComp/(totalComp + sH.incompletedTask)
 
       
-      // WE PUT THE REWARD VALUE INTO THE TASK AT COMPLETION
       taskRef.update({complete:!completionStatus})
-      statRef.update({completed:totalComp,reward:sH.reward + reward, completeHistory:cH})
+      statRef.update({completedTask:totalComp,reward:sH.reward + reward, completeHistory:cH})
     }
     else{
-      // FROM COMPLETE TO INCOMPLETE
-
-      // WE TAKE AWAY THE REWARD VALUE STORED WHEN REVERTING
-      //TODO
-      // taskRef.update({complete:!completionStatus})
+      taskRef.update({complete:!completionStatus})
 
     }
 
@@ -83,15 +66,19 @@ export default class Events extends Component {
   }
 
   // GET REAL TIME DATA FROM STATS FOR UPDATE PURPOSES
-  componentDidMount(){
+  componentDidMount =async() =>{
     LogBox.ignoreAllLogs(true);
 
     let statRef = firestore().collection("stats").doc(this.props.user);
-    statRef.onSnapshot((doc)=>{
+    this.unsubsribe = statRef.onSnapshot((doc)=>{
       if(doc.exists){
         this.setState({stats:doc.data()})
       }
     })
+  }
+
+  componentWillUnmount = () => {
+    this.unsubsribe();
   }
 
   render() {

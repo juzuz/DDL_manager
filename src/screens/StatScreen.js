@@ -26,14 +26,6 @@ export default function StatScreen(props) {
                 exists = true;
             }
         })
-        if(!exists){
-            docRef.set({
-                completeHistory:1,
-                completedTask:0,
-                incompletedTask:0,
-                reward:0
-            })
-        }
     }, [])
 
     return (
