@@ -181,7 +181,7 @@ export default function TodayScreen(props) {
                 </Container>
             </Container>
             </Container>
-            <Button large rounded style={styles.taskButton} onPress={pressHandler} >
+            <Button large rounded info style={styles.taskButton} onPress={pressHandler} >
                         <Icon name='add'></Icon>
                     </Button>
         </Container>

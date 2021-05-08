@@ -167,14 +167,15 @@ export default function NewTaskScreen(props) {
                     type: taskType,
                     startTime: firestore.Timestamp.fromDate(moment().toDate()),
                     complete: false,
-		    //used to ensure only marking incompleted task once 
-		    markAsIncompleted: false
+                    //used to ensure only marking incompleted task once 
+                    markAsIncompleted: false
                 }
             }
     	 
             var importantScore = score(data)
             data.importantScore = importantScore;
-            var reward = taskType === 'daily' ? 10*importantScore: 0;
+            var reward = taskType === 'daily' ? Math.floor(10*importantScore): 0;
+            reward = reward > 30 ? 30:reward;
             data.reward = reward;
             
             reminder(notif, importantScore, data)
@@ -214,7 +215,7 @@ const renderItem = ({ item }) => {
       <Item1
         item={item}
         //onPress={() => setSelectedId(item.id), setTag(item.id)}
-	onPress={() => setTag(item.id)}
+	    onPress={() => setTag(item.id)}
         backgroundColor={{ backgroundColor }}
         textColor={{ color }}
       />

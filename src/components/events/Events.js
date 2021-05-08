@@ -19,14 +19,6 @@ import type { EventType } from '../../screens/TodayScreen';
 import firestore from '@react-native-firebase/firestore';
 import { database } from 'faker';
 
-// function calcReward(task){
-//   var a = 5;
-//   var b = 0.5;
-
-//   var completeTime = moment();
-//   let reward = a * task.importanceScore + b * (-1* completeTime.diff(task.ddl)/((task.ddl).diff(task.startTime)) );
-//   return reward >=3 ? reward:3
-// }
 
 
 export default class Events extends Component {
@@ -45,8 +37,6 @@ export default class Events extends Component {
     const taskRef = firestore().collection(user).doc(event.id);
     const statRef = firestore().collection('stats').doc(user);
 
-    //TODO
-    
     let completionStatus = event.complete
     console.log(completionStatus)
 
@@ -54,7 +44,8 @@ export default class Events extends Component {
       let reward = 0;
       taskRef.get().then((doc)=>{
         if(doc.exists){ 
-          reward = event.type==='daily'?doc.data().reward: calcReward(event)
+          reward = event.type==='daily'?doc.data().reward: Math.floor(calcReward(event));
+          reward = reward > 30? 30:reward;
           let sH = this.state.stats;
           let totalComp = sH.completedTask+1;
 	  //if it was marked as incomplete, update it
