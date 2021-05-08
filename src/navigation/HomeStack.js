@@ -22,7 +22,9 @@ export default function HomeStack(props) {
             <Stack.Screen name="Today" 
             component={TodayScreen} 
             options={{headerShown: false}}
-            initialParams = {{user:props.route.params.user}}
+            initialParams = {{
+              user:props.route.params.user,
+            }}
             />
             <Stack.Screen name='Task' component={TaskScreen} 
             initialParams = {{user:props.route.params.user}}
