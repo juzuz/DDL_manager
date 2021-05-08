@@ -34,8 +34,40 @@ export type EventType = {
 //   FAKE_EVENTS.filter(event => event.date.isSame(date, 'day'));
 
 
+//function to check for incomplete tasks
+//if the ddl is less than current time and not marked as completed, it is incomplete
+function checkIncomplete(props) {
+    const taskRef = firestore().collection(props.route.params.user).get().then((querySnapshot) => {
+    	querySnapshot.forEach((doc) => { //for each task, check ddl
+		let hour = parseInt(moment().format('HH'));
+        	let min = parseInt(moment().format('mm'));
+        	let date = moment().startOf('day').add(hour,'h').add(min,'minute');
+		var currTime = moment(date).toDate()
+		currTime = firestore.Timestamp.fromDate(currTime)
+		//if the ddl is over and it's not completed
+		console.log(doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted);
+		if (doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted){
+			console.log("enter if incomplete");
+			firestore().collection(props.route.params.user).doc(doc.id).update({markAsIncompleted:true});
+			
+			const statRef = firestore().collection('stats').doc(props.route.params.user);
+			statRef.get().then((doc) => {
+				if (doc.exists) {
+        				let inNo = doc.data().incompletedTask + 1;
+					statRef.update({incompletedTask:inNo});
+					console.log("total incomplete tasks no. = " + inNo);
+					console.log(doc.id, " => ", doc.data().ddl);
+    				}
+			});
+			
+		}
+    	});
+    });;
+}
  
 export default function TodayScreen(props) {
+    console.log("Entered today screen");
+    checkIncomplete(props)
 
     const [displayGeneral,setDisplayGeneral] = useState([]);
     const [displayDaily,setDisplayDaily] = useState([]);

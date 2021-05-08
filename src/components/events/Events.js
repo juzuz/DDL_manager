@@ -57,8 +57,13 @@ export default class Events extends Component {
           reward = event.type==='daily'?doc.data().reward: calcReward(event)
           let sH = this.state.stats;
           let totalComp = sH.completedTask+1;
+	  //if it was marked as incomplete, update it
+	  if (sH.markAsIncompleted){
+		let totalInComp = sH.incompletedTask-1;
+		statRef.update({incompletedTask:totalInComp})
+	  }
           let cH =totalComp/(totalComp + sH.incompletedTask)
-          taskRef.update({complete:!completionStatus,reward:reward})
+          taskRef.update({complete:!completionStatus,reward:reward, markAsIncompleted: false})
           statRef.update({completedTask:totalComp,reward:sH.reward + reward, completeHistory:cH})
         }
       })
