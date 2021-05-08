@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from 'react';
-import {Text,View,StyleSheet, Dimensions,StatusBar} from 'react-native';
+import {Text,View,StyleSheet, Dimensions,StatusBar, FlatList} from 'react-native';
 import {Icon,Button,Container,Header,Content,Left,Title,Body} from 'native-base';
 import {DrawerActions} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
@@ -53,17 +53,23 @@ export default function ShopScreen(props) {
                
             }}>
                 <View style={styles.statContainer}>
-                    <View style ={styles.statBox}>
-                        <Text style={styles.statName}>Total Tasks</Text>
-                        <Text style = {styles.data}>{stats.completedTask}</Text>
-                    </View>
-                    <View style ={styles.statBox}>
-                        <Text style={styles.statName}>Completion Score</Text>
-                        <Text style = {styles.data}>
-                            {(stats.completeHistory * 100).toString().substring(0,3)} %
-                        </Text>
-                    </View>
-                </View>
+
+<FlatList
+        data={[
+          {key: 'dummy shop product 1'},
+          {key: 'dummy shop product 2'},
+          {key: 'dummy shop product 3'},
+          {key: 'dummy shop product 4'},
+          {key: 'dummy shop product 5'},
+          {key: 'dummy shop product 6'},
+          {key: 'dummy shop product 7'},
+          {key: 'dummy shop product 8'},
+          {key: 'dummy shop product 9'},
+          {key: 'dummy shop product 10'},
+        ]}
+        renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+      />
+                   </View>
                 <View style ={styles.statistic}>
 
                 </View>
@@ -100,7 +106,7 @@ const styles = StyleSheet.create({
     statBox:{
         flex:1,
         backgroundColor:'#BDD5EA',
-        height:windowHeight*0.15,
+        height:windowHeight*0.2,
         borderRadius:5,
         margin:10,
         justifyContent:'center',
@@ -117,6 +123,11 @@ const styles = StyleSheet.create({
         fontSize:16,
         color: 'black',
         fontWeight:'bold'
+    },
+    item: {
+    	padding: 10,
+    	fontSize: 18,
+    	height: 44,
     }
 
 
