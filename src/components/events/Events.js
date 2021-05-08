@@ -158,7 +158,7 @@ export default class Events extends Component {
             onRightActionRelease={() => this.rightSwipeHandler(user,event)}
             onRightActionDeactivate={() => this.setState({rightActionActivated: false})}
             >
-              <Event event={event} key={index} selectedDate = {selectedDate}/>
+              <Event event={event} key={index} selectedDate = {selectedDate} user = {user}/>
             </Swipeable>)}
         </ScrollView>
       </View>

@@ -9,8 +9,7 @@ import type Moment from 'moment';
 import Events from '../components/events/Events';
 import faker from 'faker';
 import Loader from '../components/Loader'
-// import Setting from './SettingScreen';
-
+import {MenuProvider} from 'react-native-popup-menu';
 
 // export type EventType = {
 //     date: Moment,
@@ -45,9 +44,9 @@ function checkIncomplete(props) {
 		var currTime = moment(date).toDate()
 		currTime = firestore.Timestamp.fromDate(currTime)
 		//if the ddl is over and it's not completed
-		console.log(doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted);
+		// console.log(doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted);
 		if (doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted){
-			console.log("enter if incomplete");
+			// console.log("enter if incomplete");
 			firestore().collection(props.route.params.user).doc(doc.id).update({markAsIncompleted:true});
 			
 			const statRef = firestore().collection('stats').doc(props.route.params.user);
@@ -55,8 +54,8 @@ function checkIncomplete(props) {
 				if (doc.exists) {
         				let inNo = doc.data().incompletedTask + 1;
 					statRef.update({incompletedTask:inNo});
-					console.log("total incomplete tasks no. = " + inNo);
-					console.log(doc.id, " => ", doc.data().ddl);
+					// console.log("total incomplete tasks no. = " + inNo);
+					// console.log(doc.id, " => ", doc.data().ddl);
     				}
 			});
 			
@@ -102,6 +101,27 @@ export default function TodayScreen(props) {
     }
 
   
+
+    const getTasks = async() => {
+        const userRef = firestore().collection(props.route.params.user);
+        userRef.onSnapshot((snapshot)=>{
+            if(snapshot){
+                let newTasks = snapshot.docs.map((doc)=>({
+                    id:doc.id,
+                    ...doc.data(),
+                   
+                }))
+
+                // getMiniTasks(newTasks,userRef);
+                
+                // console.log(newTasks)
+                setTasks(formatTasks(newTasks))
+                setDisplayGeneral(filterGeneralEvents(formatTasks(newTasks),moment()))
+                setDisplayDaily(filterDailyEvents(formatTasks(newTasks),moment()))
+            }
+        })
+    }
+  
     useEffect(() => {
         setTimeout(()=>{
             setLoading(false)
@@ -114,18 +134,8 @@ export default function TodayScreen(props) {
         checkIncomplete(props)
 
         if(props.route.params.user){
-        firestore().collection(props.route.params.user).onSnapshot((snapshot)=>{
-            if(snapshot){
-                const newTasks = snapshot.docs.map((doc)=>({
-                    id:doc.id,
-                    ...doc.data()
-                }))
-                setTasks(formatTasks(newTasks))
-                setDisplayGeneral(filterGeneralEvents(formatTasks(newTasks),moment()))
-                setDisplayDaily(filterDailyEvents(formatTasks(newTasks),moment()))
-            }
-        })
-    }
+            getTasks();
+        }
     },[])
 
     const pressHandler = () => {
@@ -135,6 +145,7 @@ export default function TodayScreen(props) {
     return (
         <>
         {loading ? <Loader visible ={loading}/>: <>
+        <MenuProvider>
         <StatusBar hidden={true}></StatusBar>
         <Container style={styles.container}>
             <Header style={styles.header}>
@@ -170,11 +181,11 @@ export default function TodayScreen(props) {
                 </Container>
             </Container>
             </Container>
-
             <Button large rounded style={styles.taskButton} onPress={pressHandler} >
                         <Icon name='add'></Icon>
                     </Button>
         </Container>
+        </MenuProvider>
         </>
     }
     </>
