@@ -66,8 +66,8 @@ function checkIncomplete(props) {
 }
  
 export default function TodayScreen(props) {
-    console.log("Entered today screen");
-    checkIncomplete(props)
+    // console.log("Entered today screen");
+    // checkIncomplete(props)
 
     const [displayGeneral,setDisplayGeneral] = useState([]);
     const [displayDaily,setDisplayDaily] = useState([]);
@@ -111,6 +111,8 @@ export default function TodayScreen(props) {
 
     useEffect(()=>{
         setLoading(true);
+        checkIncomplete(props)
+
         if(props.route.params.user){
         firestore().collection(props.route.params.user).onSnapshot((snapshot)=>{
             if(snapshot){
