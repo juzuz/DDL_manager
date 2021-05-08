@@ -99,7 +99,19 @@ export default class Event extends Component {
       complete
     } = event;
     const {minitask, toggle} = this.state;
-   
+    const empty = minitask.length?false:true;
+
+    const toggleToShow = () => {
+      if (empty){
+        return styles.toggleDownOpac
+      }
+      else if(toggle){
+        return  styles.toggleUp
+      }
+      else{
+        return styles.toggleDownBright
+      }
+    }
 
     return (
       <View style={(type === 'general' && complete ) || (complete &&selectedDate.isSame(moment(),'day') )?
@@ -111,7 +123,7 @@ export default class Event extends Component {
           onPress={() => this.setState({toggle:!toggle})}
           style ={{justifyContent:'center',alignItems:'flex-start',marginTop:20}}
           >
-            <Icon name ='triangle' style = {{color:'white',fontSize:14,transform:[{rotate: "180deg" }]}}/>
+            <Icon name ='triangle' style = {toggleToShow()}/>
           </Button>
         }
         </View>
@@ -207,4 +219,20 @@ menuButtonText:{
     fontSize: 15,
     fontWeight: 'bold',
   },
+  toggleDownBright:{
+    color:'white',
+    fontSize:14,
+    transform:[{rotate: "180deg" }]
+  }
+  ,
+  toggleDownOpac:{
+    opacity:0.4,
+    color:'white',
+    fontSize:14,
+    transform:[{rotate: "180deg" }]
+  },
+  toggleUp:{
+    color:'white',
+    fontSize:14,
+  }
 });
