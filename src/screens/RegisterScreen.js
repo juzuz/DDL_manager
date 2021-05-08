@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
-import {Text,View,StyleSheet,StatusBar, Dimensions} from 'react-native';
+import {Text,View,StyleSheet,StatusBar, Dimensions, Alert} from 'react-native';
 import {Icon,Button,Container,Content,Form,Item,Input, Title} from 'native-base';
 import { AuthContext } from '../navigation/AuthProvider';
+import firebase from '@react-native-firebase/app'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -27,7 +28,55 @@ export default function RegisterScreen(props) {
     }
 
     const registerHandler = () =>{
-        register(email,password);
+	var isValid = false;
+
+	if (email === ""){
+		Alert.alert('Alert', 'Email address must not be empty');	
+	}
+	else if (password === ""){
+		Alert.alert('Alert', 'Password must not be empty');
+	}
+
+	else if (confPass === "") {
+		Alert.alert('Alert', 'Confirm password must not be empty');
+	}
+
+	else if (confPass !== password) {
+		Alert.alert('Alert', 'Confirm password and password must be the same');
+	}
+	//validate email
+	else {	
+		firebase.auth().fetchSignInMethodsForEmail(email).then(function(user) {
+		}).catch(function(error) {
+    			var errorCode = error.code;
+    			var errorMessage = error.message;
+
+    			if (errorCode === 'auth/invalid-email') {
+        			alert('Invalid email.');
+    			} else {
+        			alert(errorMessage);         
+    			}
+    			console.log(error);
+		});
+		isValid = true;
+	}
+	if (isValid){
+		firebase.auth().createUserWithEmailAndPassword(email,password).then(function(user) {
+		}).catch(function(error) {
+    			var errorCode = error.code;
+    			var errorMessage = error.message;
+
+    			if (errorCode === 'auth/weak-password') {
+        			alert('Password should be at least 6 characters.');
+    			} else if (errorCode === 'auth/email-already-in-use') {
+        			alert("The email address is already in use by another account.");         
+    			}
+			else {
+        			alert(errorMessage);         
+    			}
+    			console.log(error);
+		});;
+	}
     }
     
     return (
