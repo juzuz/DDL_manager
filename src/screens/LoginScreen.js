@@ -1,7 +1,9 @@
 import React, { useContext, useState, useEffect} from 'react';
-import {Text,View,StyleSheet,StatusBar, Dimensions} from 'react-native';
+import {Text,View,StyleSheet,StatusBar, Dimensions, Alert} from 'react-native';
 import {Icon,Button,Container,Content,Form,Item,Input, Title} from 'native-base';
 import { AuthContext } from '../navigation/AuthProvider';
+import firestore from '@react-native-firebase/firestore';
+import firebase from '@react-native-firebase/app'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -21,11 +23,47 @@ export default function LoginScreen(props) {
     }
 
     const loginHandler = (event) => {
+	var isValid = false;
+	if (email === ""){
+		Alert.alert('Alert', 'Email address must not be empty');	
+	}
+	else if (password === ""){
+		Alert.alert('Alert', 'Password must not be empty');
+	}
+	//validate email
+	else {	
+		firebase.auth().fetchSignInMethodsForEmail(email).then(function(user) {
+		}).catch(function(error) {
+    			var errorCode = error.code;
+    			var errorMessage = error.message;
+
+    			if (errorCode === 'auth/invalid-email') {
+        			alert('Invalid email.');
+    			} else {
+        			alert(errorMessage);         
+    			}
+    			console.log(error);
+		});
+		isValid = true;
+	}
         event.preventDefault();
 
-        // props onAuth is a callback function from the parent component.
-        // Sends back the value true and is used to set whether the authentication was succesfull.
-        login(email,password);
+        //validate email and password match
+        if (isValid){
+		firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
+   		// user signed in
+		}).catch(function(error) {
+    			var errorCode = error.code;
+    			var errorMessage = error.message;
+
+    			if (errorCode === 'auth/wrong-password') {
+        			alert('Wrong password.');
+    			} else {
+        			alert(errorMessage);         
+    			}
+    			console.log(error);
+		});
+	}	    
     }
 
     const registerHandler = () => {
