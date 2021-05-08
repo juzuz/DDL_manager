@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import moment from 'moment';
 import type { EventType } from '../../screens/TodayScreen';
 
 export default class Event extends Component {
@@ -29,7 +30,7 @@ export default class Event extends Component {
     } = event;
     return (
       <>
-      {complete?
+      {!ddl.isSame(moment(),'day') && complete?
       <View style={styles.containerComplete}>
         <View style={styles.textContainer}>
           <Text style={styles.text}>{ddl.format()}</Text>

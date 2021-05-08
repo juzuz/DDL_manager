@@ -52,8 +52,7 @@ function reminder(notif, importanceScore, data){
 		notif.scheduleNotif('sample.mp3', timeSlice * i, data);
 	}
 	
-	
-	console.log("timeSlice = " + timeSlice);
+	// console.log("timeSlice = " + timeSlice);
 }
 
 export default function NewTaskScreen(props) {
@@ -62,7 +61,7 @@ export default function NewTaskScreen(props) {
 	
     const onRegister = (token) => {
     	setRegisterToken(token.token);
-	setFcmRegistered(true)
+	    setFcmRegistered(true)
     }
 
     const onNotif = (notif) => {
@@ -144,6 +143,7 @@ export default function NewTaskScreen(props) {
 
         if (valid){
             let user = props.route.params.user;
+            
             let data = {}
             if(taskType === 'daily'){
                 data = {
@@ -168,16 +168,17 @@ export default function NewTaskScreen(props) {
                     complete: false
                 }
             }
-           
-    	    if(data !== {})
-            {
-                var importantScore = score(data)
-                data.importantScore = importantScore;
-                reminder(notif, importantScore, data)
-    
-                const res = await firestore().collection(user).doc().set(data)
-                props.navigation.popToTop();
-            }
+    	 
+            var importantScore = score(data)
+            data.importantScore = importantScore;
+            var reward = taskType === 'daily' ? 10*importantScore: 0;
+            data.reward = reward;
+            
+            reminder(notif, importantScore, data)
+
+            const res = await firestore().collection(user).doc().set(data)
+            props.navigation.popToTop();
+            
 
         }
     }

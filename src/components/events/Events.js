@@ -12,20 +12,21 @@ import {
   LogBox
 } from 'react-native';
 import moment from "moment";
+import {calcReward} from '../reward/reward';
 import { Icon, ListItem } from 'native-base';
 import Event from './Event';
 import type { EventType } from '../../screens/TodayScreen';
 import firestore from '@react-native-firebase/firestore';
 import { database } from 'faker';
 
-function calcReward(task){
-  var a = 5;
-  var b = 0.5;
+// function calcReward(task){
+//   var a = 5;
+//   var b = 0.5;
 
-  var completeTime = moment();
-  let reward = a * task.importanceScore + b * (-1* completeTime.diff(task.ddl)/((task.ddl).diff(task.startTime)) );
-  return reward >=3 ? reward:3
-}
+//   var completeTime = moment();
+//   let reward = a * task.importanceScore + b * (-1* completeTime.diff(task.ddl)/((task.ddl).diff(task.startTime)) );
+//   return reward >=3 ? reward:3
+// }
 
 
 export default class Events extends Component {
@@ -48,13 +49,20 @@ export default class Events extends Component {
     
     let completionStatus = event.complete
     if (!completionStatus){
-      let reward = calcReward(event);
-      let sH = this.state.stats;
-      let totalComp = sH.completedTask+1;
-      let cH =totalComp/(totalComp + sH.incompletedTask)
+      let reward = 0;
+        taskRef.get().then((doc)=>{
+          if(doc.exists){ 
+            reward = event.type==='daily'?doc.data().reward: calcReward(event)
+            let sH = this.state.stats;
+            let totalComp = sH.completedTask+1;
+            let cH =totalComp/(totalComp + sH.incompletedTask)
+            console.log(reward)
 
-      taskRef.update({complete:!completionStatus})
-      statRef.update({completedTask:totalComp,reward:sH.reward + reward, completeHistory:cH})
+            taskRef.update({complete:!completionStatus})
+            statRef.update({completedTask:totalComp,reward:sH.reward + reward, completeHistory:cH})
+
+          }
+        })
     }
     else{
       taskRef.update({complete:!completionStatus})
