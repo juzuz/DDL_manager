@@ -215,7 +215,7 @@ const renderItem = ({ item }) => {
       <Item1
         item={item}
         //onPress={() => setSelectedId(item.id), setTag(item.id)}
-	    onPress={() => setTag(item.id)}
+	    onPress={() => setTag(item.title)}
         backgroundColor={{ backgroundColor }}
         textColor={{ color }}
       />
