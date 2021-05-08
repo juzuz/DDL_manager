@@ -9,16 +9,33 @@ const windowHeight = Dimensions.get('window').height;
 export default function StatScreen(props) {
 
     const [stats,setStats] = useState({});
-  
+    const getUserStats = (user) => {
+        return firestore().collection('stats').doc(user);
+    }
+
+
     useEffect(() => {
-        setStats(props.route.params.stats)
-        console.log(props.route.params)
-    }, [props.route.params.stats])
-  
+        if(props.route.params.user){
+
+        const docRef = getUserStats(props.route.params.user);
+        let exists = false;
+        docRef.onSnapshot((snapshot)=> {
+            if(snapshot.exists){
+                const statDoc = ({
+                    ...snapshot.data(),
+                })
+                setStats(statDoc);
+                exists = true;
+            }
+        })
+    }
+    }, [])
 
     return (
         <>
+        
         <StatusBar hidden={true}></StatusBar>
+        {stats?
         <Container style={styles.container}>
             <Header style={styles.header}>
                 <Left>
@@ -38,7 +55,7 @@ export default function StatScreen(props) {
                 <View style={styles.statContainer}>
                     <View style ={styles.statBox}>
                         <Text style={styles.statName}>Total Tasks</Text>
-                        <Text style = {styles.data}>{stats.numTask}</Text>
+                        <Text style = {styles.data}>{stats.completedTask}</Text>
                     </View>
                     <View style ={styles.statBox}>
                         <Text style={styles.statName}>Completion Score</Text>
@@ -53,6 +70,8 @@ export default function StatScreen(props) {
             
             </Content>
         </Container>
+        :
+        null}
         </>
     )
 }

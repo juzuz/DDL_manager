@@ -13,38 +13,26 @@ const Drawer = createDrawerNavigator();
 export default function AppStack(props) {
 
     const {logout} = useContext(AuthContext);
+    const [tasks,setTasks] = useState(null)
     const [stats,setStats] = useState(null)
 
-    const getUserStats = (user) => {
-        return firestore().collection('stats').doc(user);
-    }
- 
     useEffect(() => {
-        const docRef = getUserStats(props.user)
-        let exists = false;
-        docRef.onSnapshot((snapshot)=> {
-            if(snapshot.exists){
-                const statDoc = ({
-                    ...snapshot.data(),
+        let statRef = firestore().collection('stats').doc(props.user);
+        statRef.get().then(doc=>{
+            if (!doc.exits){
+                statRef.set({
+                    completeHistory:1,
+                    completedTask:0,
+                    incompletedTask:0,
+                    reward:0
                 })
-                setStats(statDoc);
-                exists = true;
             }
         })
-        if(!exists){
-            docRef.set({
-                user:props.user,
-                completeHistory:1,
-                numTask:0,
-                reward:0
-            })
-        }
     }, [])
-   
-  
+
     return (
         <>
-        {stats?
+      
     <Drawer.Navigator drawerContent={props => {
         return (
             <DrawerContentScrollView>
@@ -56,9 +44,8 @@ export default function AppStack(props) {
         <Drawer.Screen name="Home" component={HomeStack} initialParams={{user: props.user}} />
         <Drawer.Screen name='Stats' component={StatScreen} initialParams={{user:props.user, stats:stats}} />
     </Drawer.Navigator>
-    :
-    null
-}
+
+
     </>
     )
 }

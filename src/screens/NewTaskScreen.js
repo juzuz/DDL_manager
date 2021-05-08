@@ -10,7 +10,6 @@ import NotifService from '../components/notifications/NotifService';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
 //function to calculate importanceScore
 function score(data){
 	//placeholders
@@ -53,8 +52,7 @@ function reminder(notif, importanceScore, data){
 		notif.scheduleNotif('sample.mp3', timeSlice * i, data);
 	}
 	
-	
-	console.log("timeSlice = " + timeSlice);
+	// console.log("timeSlice = " + timeSlice);
 }
 
 export default function NewTaskScreen(props) {
@@ -63,7 +61,7 @@ export default function NewTaskScreen(props) {
 	
     const onRegister = (token) => {
     	setRegisterToken(token.token);
-	setFcmRegistered(true)
+	    setFcmRegistered(true)
     }
 
     const onNotif = (notif) => {
@@ -123,6 +121,7 @@ export default function NewTaskScreen(props) {
 
     const submitHandler = async() =>{
         let valid = false;
+        let taskType = props.route.params.type;
         if (taskName === ""){
             Alert.alert('Alert', 'Task name must not be empty');
         }
@@ -135,7 +134,7 @@ export default function NewTaskScreen(props) {
             Alert.alert('Alert', 'Tag must not be empty');
         }
     
-        else if (dateString === "Select your deadline"){
+        else if (taskType === 'general' && dateString === "Select your deadline"){
             Alert.alert('Alert', 'Please choose a date');
         }
         else{
@@ -144,23 +143,43 @@ export default function NewTaskScreen(props) {
 
         if (valid){
             let user = props.route.params.user;
-            let dateTime = moment(date).toDate()
-            let data = {
-                task: taskName,
-                priority: priority,
-                ddl: firestore.Timestamp.fromDate(dateTime),
-                tag: tag,
-                type: props.route.params.type,
-		startTime: firestore.Timestamp.fromDate(moment().toDate())
+            
+            let data = {}
+            if(taskType === 'daily'){
+                data = {
+                    task: taskName,
+                    priority: priority,
+                    ddl: firestore.Timestamp.fromDate(moment().toDate()),
+                    tag: tag,
+                    type: taskType,
+                    startTime: firestore.Timestamp.fromDate(moment().toDate()),
+                    complete: false
+                }
             }
-    	    
-	    
-	    var importantScore = score(data)
-	    data.importantScore = importantScore;
-	    reminder(notif, importantScore, data)
+            else{
+                let dateTime = moment(date).toDate()
+                data = {
+                    task: taskName,
+                    priority: priority,
+                    ddl: firestore.Timestamp.fromDate(dateTime),
+                    tag: tag,
+                    type: taskType,
+                    startTime: firestore.Timestamp.fromDate(moment().toDate()),
+                    complete: false
+                }
+            }
+    	 
+            var importantScore = score(data)
+            data.importantScore = importantScore;
+            var reward = taskType === 'daily' ? 10*importantScore: 0;
+            data.reward = reward;
+            
+            reminder(notif, importantScore, data)
 
             const res = await firestore().collection(user).doc().set(data)
             props.navigation.popToTop();
+            
+
         }
     }
 
@@ -189,7 +208,7 @@ export default function NewTaskScreen(props) {
                         underlineColorAndroid="transparent" 
                         placeholderTextColor='white'  
                         style={styles.input} 
-                        placeholder='Type Priority (0-10)'
+                        placeholder='Type Priority (1-10)'
                         />
                 </Item>
                 <Item style={{borderBottomWidth:0}}>
@@ -201,7 +220,8 @@ export default function NewTaskScreen(props) {
                     placeholder='Type Tag'
                     />
                 </Item>
-              
+
+                {(props.route.params.type === 'daily') ? null:
                 <Item style={{borderBottomWidth:0, marginTop:10}}>
                     <View style = {{flex:1, flexDirection:'row'}}>
                         <View style = {{backgroundColor:'#495867', justifyContent:'center'}}>
@@ -215,7 +235,7 @@ export default function NewTaskScreen(props) {
                         </Button>
                     </View>
                 </Item>
-                
+                }
                 <Item style={{borderBottomWidth:0,marginTop:10}}>
                     <Button
                         onPress={submitHandler}
