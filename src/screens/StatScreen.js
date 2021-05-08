@@ -20,7 +20,7 @@ export default function StatScreen(props) {
         const docRef = getUserStats(props.route.params.user);
         let exists = false;
         docRef.onSnapshot((snapshot)=> {
-            if(snapshot.exists){
+            if(snapshot){
                 const statDoc = ({
                     ...snapshot.data(),
                 })
