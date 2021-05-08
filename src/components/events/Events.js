@@ -109,7 +109,7 @@ export default class Events extends Component {
         <ScrollView>
           {events && events.map((event, index) =>
             <Swipeable 
-            disable = {(event.type === 'daily' && moment().isSame(selectedDate,'day')) ? false:true}
+            disable = {(event.type === 'daily' && !moment().isSame(selectedDate,'day')) ? true:false}
             leftActionActivationDistance ={150}
             rightActionActivationDistance = {150}
             leftContent={leftContent} 
