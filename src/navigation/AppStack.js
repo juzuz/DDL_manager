@@ -21,7 +21,7 @@ export default function AppStack(props) {
             if(doc.exists){
                 setTrackingDate(doc.data().trackingDate.toDate())
             }
-            if (!doc.exists){   
+            else{   
                 let now =moment();
                 
                 statRef.set({
@@ -51,7 +51,7 @@ export default function AppStack(props) {
     }}>
         <Drawer.Screen name="Task Manager" component={HomeStack} initialParams={{user: props.user}} />
         <Drawer.Screen name='Your Stats' component={StatScreen} initialParams={{user:props.user, trackingDate:trackingDate}} />
-	    <Drawer.Screen name='Shop' component={ShopScreen} initialParams={{user:props.user}} />
+	    <Drawer.Screen name='Rewards' component={ShopScreen} initialParams={{user:props.user}} />
     </Drawer.Navigator>
     :null
     }

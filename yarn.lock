@@ -1430,6 +1430,11 @@
   dependencies:
     "invariant" "^2.2.4"
 
+"@react-native-community/slider@^3.0.3":
+  "integrity" "sha512-8IeHfDwJ9/CTUwFs6x90VlobV3BfuPgNLjTgC6dRZovfCWigaZwVNIFFJnHBakK3pW2xErAPwhdvNR4JeNoYbw=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/slider/-/slider-3.0.3.tgz"
+  "version" "3.0.3"
+
 "@react-native-firebase/app@^11.4.1", "@react-native-firebase/app@11.4.1":
   "integrity" "sha512-RzG3kGzKwO/Ets3S4XxAoki4GhzaHRVrnUDyr7U1zOL46xqOMGD7MKTmpYBa9qzh5GOz3aQwlRvu1yRhPHNGKA=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-11.4.1.tgz"
