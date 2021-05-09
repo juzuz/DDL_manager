@@ -178,45 +178,7 @@ export default function NewTaskScreen(props) {
             props.navigation.popToTop();
         }
     }
-//list of tags
-const DATA = [
-  {
-    label: "Workout",
-    value: "Workout"
-  },
-  {
-    label: "Academic",
-    value: "Academic",
-  },
-  {
-    label: "Entertainment",
-    value: "Entertainment",
-  },
-  {
-    label: "Health",
-    value: "Health",
-  },
-];
-// const Item1 = ({ item, onPress, backgroundColor, textColor }) => (
-//   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-//     <Text style={[styles.title, textColor]}>{item.title}</Text>
-//   </TouchableOpacity>
-// );
 
-// const renderItem = ({ item }) => {
-//     const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-//     const color = item.id === selectedId ? 'white' : 'black';
-
-//     return (
-//       <Item1
-//         item={item}
-//         onPress={() => se/tSelectedId(item.id), setTag(item.id)}
-// 	    onPress={() => setTag(item.id)}
-//         backgroundColor={{ backgroundColor }}
-//         textColor={{ color }}
-//       />
-//     );
-//   };
 
     return (
         <>
