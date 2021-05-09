@@ -112,9 +112,7 @@ export default function TodayScreen(props) {
                    
                 }))
 
-                // getMiniTasks(newTasks,userRef);
-                
-                // console.log(newTasks)
+
                 setTasks(formatTasks(newTasks))
                 setDisplayGeneral(filterGeneralEvents(formatTasks(newTasks),moment()))
                 setDisplayDaily(filterDailyEvents(formatTasks(newTasks),moment()))
