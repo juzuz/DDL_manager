@@ -67,9 +67,9 @@ export default function ShopScreen(props) {
                 </Body>
             </Header>
             <Content contentContainerStyle={{
-                flex:1,
                
             }}>
+
                 <View style={styles.statContainer}>
 <View>
 <Text style = {styles.rewardTitle}> {"You have " + stats.reward + " reward points left."} </Text>

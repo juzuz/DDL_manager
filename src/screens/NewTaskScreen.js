@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import {Text,View, StyleSheet, SafeAreaView, StatusBar, Dimensions, Alert, FlatList, TouchableOpacity} from 'react-native';
+import {Text,View, StyleSheet, SafeAreaView, StatusBar, Dimensions, Alert } from 'react-native';
 import {Icon,Button,Container,Header,Content,Input,Item} from 'native-base';
-
-import {DrawerActions} from '@react-navigation/native';
+import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import firestore from '@react-native-firebase/firestore';
@@ -29,8 +28,8 @@ function score(data){
 //function to setup notifications
 function reminder(notif, importanceScore, data){
 	let hour = parseInt(moment().format('HH'));
-        let min = parseInt(moment().format('mm'));
-        let date = moment().startOf('day').add(hour,'h').add(min,'minute');
+    let min = parseInt(moment().format('mm'));
+    let date = moment().startOf('day').add(hour,'h').add(min,'minute');
 	var currTime = moment(date).toDate()
 	currTime = firestore.Timestamp.fromDate(currTime)
 	console.log(currTime);
@@ -42,17 +41,13 @@ function reminder(notif, importanceScore, data){
 		timeSlice = 300;
 		count = 1;
 	}
-	
 	else {
 		var timeSlice = remainTime / count;
 	}
-
 	//schedule count no. of notif evenly
 	for (var i = 1; i <= count; i++){
 		notif.scheduleNotif('sample.mp3', timeSlice * i, data);
 	}
-	
-	// console.log("timeSlice = " + timeSlice);
 }
 
 export default function NewTaskScreen(props) {
@@ -144,7 +139,6 @@ export default function NewTaskScreen(props) {
 
         if (valid){
             let user = props.route.params.user;
-            
             let data = {}
             if(taskType === 'daily'){
                 data = {
@@ -182,45 +176,9 @@ export default function NewTaskScreen(props) {
 
             const res = await firestore().collection(user).doc().set(data)
             props.navigation.popToTop();
-            
-
         }
     }
-//list of tags
-const DATA = [
-  {
-    id: "1",
-    title: "Sports",
-  },
-  {
-    id: "2",
-    title: "Study",
-  },
-  {
-    id: "3",
-    title: "Entertainment",
-  },
-];
-const Item1 = ({ item, onPress, backgroundColor, textColor }) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-    <Text style={[styles.title, textColor]}>{item.title}</Text>
-  </TouchableOpacity>
-);
 
-const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-    const color = item.id === selectedId ? 'white' : 'black';
-
-    return (
-      <Item1
-        item={item}
-        //onPress={() => setSelectedId(item.id), setTag(item.id)}
-	    onPress={() => setTag(item.title)}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
-      />
-    );
-  };
 
     return (
         <>
@@ -250,15 +208,25 @@ const renderItem = ({ item }) => {
                         placeholder='Type Priority (1-10)'
                         />
                 </Item>
-		<Item>
-      		     <FlatList
-        		data={DATA}
-			style={styles.item} 
-        		renderItem={renderItem}
-        		keyExtractor={(item) => item.id}
-        		extraData={selectedId}
-      			/>
-    		</Item>
+		        <Item>
+                <Picker
+                style={styles.picker}
+                selectedValue={tag}
+                enabled={true}
+                mide={'dialog'}
+                prompt={'Set Tag'}
+                onValueChange={(itemValue, itemIndex) =>
+                    setTag(itemValue)
+                }>
+                    <Picker.Item label="Health" value="Health" />
+                    <Picker.Item label="Academic" value="Academic" />
+                    <Picker.Item label="Workout" value="Workout" />
+                    <Picker.Item label="Project" value="Project" />
+                    <Picker.Item label="Work" value="Work" />
+                    <Picker.Item label="Habit" value="Habit" />
+                </Picker>
+      		  
+    		    </Item>
 
                 {(props.route.params.type === 'daily') ? null:
                 <Item style={{borderBottomWidth:0, marginTop:10}}>
@@ -343,4 +311,8 @@ const styles = StyleSheet.create({
     title: {
     	fontSize: 32,
     },
+    picker:{
+        flex:1,
+        color:"#E5E5F3"
+    }
 })

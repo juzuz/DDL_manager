@@ -110,8 +110,10 @@ export default function TodayScreen(props) {
     const [tasks,setTasks] = useState([]);
     const [selectedDate,setSelectedDate] = useState(moment());
 
-    const filterGeneralEvents = (taskArray,date: Moment): ?Array<EventType> =>
-    taskArray.filter(event => (moment(event.ddl).isSame(date, 'day') && event.type === 'general'));
+    const filterGeneralEvents = (taskArray,date: Moment): ?Array<EventType> => 
+    taskArray.filter(event => (moment(event.ddl).isSame(date, 'day') && event.type === 'general')).sort((a,b) => {
+        return a.ddl.toDate().getTime() - b.ddl.toDate().getTime()
+    });
 
     const filterDailyEvents = (taskArray,date: Moment): ?Array<EventType> =>
     taskArray.filter(event => (event.type === 'daily'));
@@ -148,9 +150,7 @@ export default function TodayScreen(props) {
                    
                 }))
 
-                // getMiniTasks(newTasks,userRef);
-                
-                // console.log(newTasks)
+
                 setTasks(formatTasks(newTasks))
                 setDisplayGeneral(filterGeneralEvents(formatTasks(newTasks),moment()))
                 setDisplayDaily(filterDailyEvents(formatTasks(newTasks),moment()))
@@ -201,6 +201,7 @@ export default function TodayScreen(props) {
             <Container style={styles.generalEvents}>
                 <Container style={styles.generalContainer}>
                     <Title style={styles.taskTitle}>General Tasks</Title>
+                    <View style = {styles.divider}/>
                     <Content contentContainerStyle={{
                     }}>
                         <Events events={displayGeneral} user = {props.route.params.user} selectedDate={ selectedDate}/>
@@ -211,6 +212,8 @@ export default function TodayScreen(props) {
             <Container style={styles.dailyEvents}>
                 <Container style={styles.dailyContainer}>
                     <Title style={styles.taskTitle}>Daily Tasks</Title>
+                    <View style = {styles.divider}/>
+
                     <Content>
                         <Events events={displayDaily} user = {props.route.params.user} selectedDate={selectedDate}/>
                     </Content>
@@ -251,8 +254,10 @@ const styles = StyleSheet.create({
     },
     taskTitle:{
         textAlign:'center',
-        fontSize:20,
-        fontWeight:'bold'
+        fontSize:22,
+        fontWeight:'bold',
+        borderBottomColor:'white',
+        borderBottomWidth:2,
     },
     header: {
         backgroundColor: "#1e212a"
@@ -272,5 +277,6 @@ const styles = StyleSheet.create({
         color:'white',
         fontSize:24,
         fontWeight:'normal'
-    }
+    },
+ 
 })

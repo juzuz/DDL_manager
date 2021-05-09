@@ -128,9 +128,12 @@ export default class Event extends Component {
         }
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.text}>{ddl.format()}</Text>
           <Text style={[styles.text, styles.title]}>{task}</Text>
-          <Text style={styles.text}>{tag}</Text>
+          {
+            type === 'general' &&
+          <Text style={styles.text}>{ddl.calendar()}</Text>
+          }
+          <Text style={styles.text}># {tag}</Text>
           {
             toggle && minitask && 
             minitask.map((mTask, index) => 

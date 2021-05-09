@@ -38,7 +38,37 @@ export default function TaskScreen(props) {
                         <Text style= {styles.buttonText}>One Time Task</Text>
                     </View>
                 </Button>
+
+                <View>
+                    <Text style = {{color:'yellow'}}>
+                        OR CHOOSE FROM THESE CATERGORIES
+                    </Text>
+                </View>
+
+                <Button large rounded style={styles.taskButton}>
+                    <View style={styles.buttonContent}>
+                        <Text style= {styles.buttonText}>Healthy Habits</Text>
+                    </View>
+                </Button>
+                <Button large rounded style={styles.taskButton} >
+                    <View style={styles.buttonContent}>
+                        <Text style= {styles.buttonText}>Academic Excellence</Text>
+                    </View>
+                </Button>
+
+                <Button large rounded style={styles.taskButton} >
+                    <View style={styles.buttonContent}>
+                        <Text style= {styles.buttonText}>Workout Maniac</Text>
+                    </View>
+                </Button>
+                <Button large rounded style={styles.taskButton} >
+                    <View style={styles.buttonContent}>
+                        <Text style= {styles.buttonText}>Cut Procrastination</Text>
+                    </View>
+                </Button>
+                
             </Container>
+           
             </Content>
         </Container>
         </>
