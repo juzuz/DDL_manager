@@ -49,30 +49,30 @@ export default function ShopScreen(props) {
                 </Body>
             </Header>
             <Content contentContainerStyle={{
-                flex:1,
                
             }}>
-                <View style={styles.statContainer}>
 
-<FlatList
-        data={[
-          {key: 'dummy shop product 1'},
-          {key: 'dummy shop product 2'},
-          {key: 'dummy shop product 3'},
-          {key: 'dummy shop product 4'},
-          {key: 'dummy shop product 5'},
-          {key: 'dummy shop product 6'},
-          {key: 'dummy shop product 7'},
-          {key: 'dummy shop product 8'},
-          {key: 'dummy shop product 9'},
-          {key: 'dummy shop product 10'},
-        ]}
-        renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
-      />
+            <View style={styles.statContainer}>
+            <View>
+                <Text>Reward</Text>
+            </View>
+            <FlatList
+                data={[
+                {key: 'dummy shop product 1'},
+                {key: 'dummy shop product 2'},
+                {key: 'dummy shop product 3'},
+                {key: 'dummy shop product 4'},
+                {key: 'dummy shop product 5'},
+                {key: 'dummy shop product 6'},
+                {key: 'dummy shop product 7'},
+                {key: 'dummy shop product 8'},
+                {key: 'dummy shop product 9'},
+                {key: 'dummy shop product 10'},
+                ]}
+                renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+            />
                    </View>
-                <View style ={styles.statistic}>
 
-                </View>
             
             </Content>
         </Container>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     statContainer:{
        backgroundColor: "#495867",
        flex:1,
-       flexDirection:'row'
+       flexDirection:'column'
     },
     statistic:{
         flex:1

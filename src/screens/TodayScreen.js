@@ -7,7 +7,6 @@ import firestore from '@react-native-firebase/firestore';
 import Calendar from '../components/calendar/Calendar';
 import type Moment from 'moment';
 import Events from '../components/events/Events';
-import faker from 'faker';
 import Loader from '../components/Loader'
 import {MenuProvider} from 'react-native-popup-menu';
 
@@ -65,8 +64,6 @@ function checkIncomplete(props) {
 }
  
 export default function TodayScreen(props) {
-    // console.log("Entered today screen");
-    // checkIncomplete(props)
 
     const [displayGeneral,setDisplayGeneral] = useState([]);
     const [displayDaily,setDisplayDaily] = useState([]);
@@ -74,8 +71,10 @@ export default function TodayScreen(props) {
     const [tasks,setTasks] = useState([]);
     const [selectedDate,setSelectedDate] = useState(moment());
 
-    const filterGeneralEvents = (taskArray,date: Moment): ?Array<EventType> =>
-    taskArray.filter(event => (moment(event.ddl).isSame(date, 'day') && event.type === 'general'));
+    const filterGeneralEvents = (taskArray,date: Moment): ?Array<EventType> => 
+    taskArray.filter(event => (moment(event.ddl).isSame(date, 'day') && event.type === 'general')).sort((a,b) => {
+        return a.ddl.toDate().getTime() - b.ddl.toDate().getTime()
+    });
 
     const filterDailyEvents = (taskArray,date: Moment): ?Array<EventType> =>
     taskArray.filter(event => (event.type === 'daily'));
