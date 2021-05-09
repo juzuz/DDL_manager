@@ -133,7 +133,7 @@ export default class Event extends Component {
             type === 'general' &&
           <Text style={styles.text}>{ddl.calendar()}</Text>
           }
-          <Text style={styles.text}># {tag}</Text>
+            <Text style={styles.text}># {tag}</Text>
           {
             toggle && minitask && 
             minitask.map((mTask, index) => 

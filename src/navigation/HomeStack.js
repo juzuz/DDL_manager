@@ -3,8 +3,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import TodayScreen from '../screens/TodayScreen';
 import TaskScreen from '../screens/TaskScreen';
 import NewTaskScreen from '../screens/NewTaskScreen';
-import Loader from '../components/Loader';
-
 const Stack = createStackNavigator();
 
 export default function HomeStack(props) {
@@ -44,20 +42,22 @@ export default function HomeStack(props) {
             
             options={{
               headerTitle:"New Task", 
-              headerTintColor:'#E5E5F3',
+
+              headerTintColor:'#ffffff',
               headerStyle: {
                 height:100,
                 shadowColor: 'transparent',
-                backgroundColor:'#495867',
+                backgroundColor:'#232733',
                 
               },
               headerTitleAlign:'center',
               headerTitleStyle:{
                 bottom:0,
-                color:'#E5E5F3',
+                color:'#ffffff',
                 fontSize:24,
               },
-            }}/>
+            }
+            }/>
         </Stack.Navigator>
     )
 }

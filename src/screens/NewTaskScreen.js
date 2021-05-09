@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {Text,View, StyleSheet, SafeAreaView, StatusBar, Dimensions, Alert } from 'react-native';
 import {Icon,Button,Container,Header,Content,Input,Item} from 'native-base';
 import {Picker} from '@react-native-picker/picker';
+import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import firestore from '@react-native-firebase/firestore';
@@ -24,6 +25,8 @@ function score(data){
 		
 	}
 }
+
+
 
 //function to setup notifications
 function reminder(notif, importanceScore, data){
@@ -72,7 +75,6 @@ export default function NewTaskScreen(props) {
     const [priority, setPriority] = useState(0);
     const [tag,setTag] = useState("");
     const [mode,setMode] = useState("date");
-    const [selectedId, setSelectedId] = useState(null);
 
     const dateHandler = (event,val) => {
         if (mode === 'date') {
@@ -90,14 +92,26 @@ export default function NewTaskScreen(props) {
         }
     }
 
+    const priorityDisplay =() =>{
+        if(priority <3)
+            return "I can miss it a few times"
+        else if (priority <5)
+            return "I can see my mama nagging"
+        else if(priority ==5)
+            return "I can see myself doing this"
+        else if(priority < 8)
+            return "I need to get somewhat serious"
+        else if(priority < 10)
+            return "Mama! SOS Alert"
+        else
+            return "MAYDAY! MAYDAY!"
+    }
+
     const taskNameHandler = (val) => {
 	      setTaskName(val); 
     }
 
-    const priorityHandler = (val) => {
-        setPriority(parseInt(val))
-    }
-
+  
     const tagHandler = (val) => {
         setTag(val)
     }
@@ -189,24 +203,35 @@ export default function NewTaskScreen(props) {
                 
             }}>
             <Container style={styles.card}>
-        
+                <View style ={{width:windowWidth*0.94, borderWidth:1,borderColor:'#232733',borderTopRightRadius:20,borderBottomLeftRadius:20,backgroundColor:'#232733'}}>
+                <View style={{ padding:20}}>
+
+                <Item style={{borderBottomWidth:0}}>
+                    <Text style = {{color:"white",fontSize:26,flex:1,textAlign:'center',fontWeight:'bold'}}>New Habit</Text>
+                </Item>
                 <Item style={{borderBottomWidth:0}}>
                     <Input 
                         onChangeText ={(val) => taskNameHandler(val)} 
                         underlineColorAndroid="transparent" 
-                        placeholderTextColor='white'  
+                        placeholderTextColor='black'  
                         style={styles.input} 
                         placeholder='Name your task'
                         />
                 </Item>
                 <Item style={{borderBottomWidth:0}}>
-                    <Input 
-                        onChangeText = {(val) => priorityHandler(val)}
-                        underlineColorAndroid="transparent" 
-                        placeholderTextColor='white'  
-                        style={styles.input} 
-                        placeholder='Type Priority (1-10)'
-                        />
+                    <View style={{flex:1,flexDirection:'column',marginTop:20}}>
+                    <Text style={{paddingLeft:10,color:'white',fontSize:16}}>Priority: {priorityDisplay()} </Text>
+                    <Slider 
+                     style={{marginTop:20,marginBottom:10}}
+                     minimumValue={1}
+                     maximumValue={10}
+                     onValueChange={(value)=>setPriority(value)}
+                     minimumTrackTintColor="orange"
+                    maximumTrackTintColor="white"
+                     step ={1}
+                    />
+                    </View>
+                 
                 </Item>
 		        <Item>
                 <Picker
@@ -234,10 +259,10 @@ export default function NewTaskScreen(props) {
                         <View style = {{backgroundColor:'#495867', justifyContent:'center'}}>
                             <Text style={{marginRight:10, marginLeft:10, color:'white',fontSize:18,fontWeight:'bold'}}>{dateString}</Text>
                         </View>
-                        <Button style ={{marginLeft:10 }} onPress ={showDatePicker}>
+                        <Button style ={{marginLeft:10 ,backgroundColor:'orange'}} onPress ={showDatePicker}>
                             <Icon name ='calendar' />
                         </Button>
-                        <Button style ={{marginLeft:10 }}onPress ={showTimePicker}>
+                        <Button style ={{marginLeft:10,backgroundColor:'orange' }}onPress ={showTimePicker}>
                             <Icon name='time'/>
                         </Button>
                     </View>
@@ -246,8 +271,9 @@ export default function NewTaskScreen(props) {
                 <Item style={{borderBottomWidth:0,marginTop:10}}>
                     <Button
                         onPress={submitHandler}
+                        style={{flex:1,backgroundColor:'orange'}}
                     >
-                        <Icon name ='checkmark'/>
+                    <Text style={{flex:1,textAlign:'center',color:'white',fontSize:18,fontWeight:'bold'}}>Create New Task</Text>
                    </Button>
                 </Item>
                 {
@@ -260,6 +286,8 @@ export default function NewTaskScreen(props) {
                         />
                     )
                 }
+                </View>
+                </View>
             </Container>
             </Content>
 
@@ -276,27 +304,22 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     input:{
-        backgroundColor:"#495867",
+        backgroundColor:"white",
         marginTop:10,
         borderRadius:5,
         // borderTopLeftRadius:25,
         // borderTopRightRadius:25,
         height:60,
-        color:'white',
+        color:'black',
         textAlign:'center',
-        fontWeight:'bold',
-        fontSize:20,
+        fontSize:16,
     }, 
     buttonText:{
-        fontSize:21,
+        fontSize:20,
         fontWeight:'bold',
-        color: '#E5E5F3',
+        color: 'black',
     },
-    buttonText:{
-        fontSize:21,
-        fontWeight:'bold',
-        color: '#E5E5F3',
-    },
+  
     card:{
         backgroundColor:'#1e212a',
         width:windowWidth*0.94,

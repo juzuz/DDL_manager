@@ -5,7 +5,7 @@ import {DrawerActions} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowHeight = Dimensions.get('screen').height;
 
 export default function TaskScreen(props) {
 
@@ -26,6 +26,7 @@ export default function TaskScreen(props) {
                 // justifyContent:'center'
             }}>
             <Container style={styles.buttonGroup}>
+                <View>
                 <Button large rounded style={styles.taskButton} onPress={dailyButtonHandler}>
                     <View style={styles.buttonContent}>
                         <Icon name='calendar-sharp' style={styles.icon1} />
@@ -38,35 +39,44 @@ export default function TaskScreen(props) {
                         <Text style= {styles.buttonText}>One Time Task</Text>
                     </View>
                 </Button>
-
+                </View>
                 <View>
                     <Text style = {{color:'yellow'}}>
                         OR CHOOSE FROM THESE CATERGORIES
                     </Text>
                 </View>
+                <View style ={{borderRadius:2,marginTop:20}}>
+                <View style={{flex:1,flexDirection:'column',backgroundColor:'#31343a',width:windowWidth*0.9,borderRadius:25}}>
+                    <View style={styles.cat}>
+                        <Text style= {styles.catText}>Healthy Habits</Text>
+                    </View>
+                    <View style={{marginTop:30,backgroundColor:'white',height:0.5}}/>
 
-                <Button large rounded style={styles.taskButton}>
-                    <View style={styles.buttonContent}>
-                        <Text style= {styles.buttonText}>Healthy Habits</Text>
+                    <View style={styles.cat}>
+                        <Text style= {styles.catText}>Academic Excellence</Text>
                     </View>
-                </Button>
-                <Button large rounded style={styles.taskButton} >
-                    <View style={styles.buttonContent}>
-                        <Text style= {styles.buttonText}>Academic Excellence</Text>
+                    <View style={{marginTop:30,backgroundColor:'white',height:0.5}}/>
+                    
+                    <View style={styles.cat}>
+                        <Text style= {styles.catText}>Workout Maniac</Text>
                     </View>
-                </Button>
-
-                <Button large rounded style={styles.taskButton} >
-                    <View style={styles.buttonContent}>
-                        <Text style= {styles.buttonText}>Workout Maniac</Text>
+                    <View style={{marginTop:30,backgroundColor:'white',height:0.5}}/>
+                    <View style={styles.cat}>
+                        <Text style= {styles.catText}>Cut Procrastination</Text>
                     </View>
-                </Button>
-                <Button large rounded style={styles.taskButton} >
-                    <View style={styles.buttonContent}>
-                        <Text style= {styles.buttonText}>Cut Procrastination</Text>
+                    <View style={{marginTop:30,backgroundColor:'white',height:0.5}}/>
+                    <View style={styles.cat}>
+                        <Text style= {styles.catText}>Daily Excercise</Text>
                     </View>
-                </Button>
-                
+                    <View style={{marginTop:30,backgroundColor:'white',height:0.5}}/><View style={styles.cat}>
+                        <Text style= {styles.catText}>Hydration Check</Text>
+                    </View>
+                    <View style={{marginTop:30,backgroundColor:'white',height:0.5}}/><View style={styles.cat}>
+                        <Text style= {styles.catText}>Increase Productivity</Text>
+                    </View>
+                    <View style={{marginTop:30,backgroundColor:'white',height:0.5}}/>
+                </View>
+                </View>
             </Container>
            
             </Content>
@@ -85,6 +95,16 @@ const styles = StyleSheet.create({
     buttonContent:{
      flex:1,
      flexDirection:'row'
+    },
+    cat:{
+        marginTop:5,
+    },
+    catText:{
+        marginTop:20,
+        textAlign:'center',
+        fontSize:22,
+        fontWeight:'bold',
+        color: '#E5E5F3',
     },
    
     buttonText:{

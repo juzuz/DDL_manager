@@ -4,6 +4,7 @@ import {Icon,Button,Container,Header,Content,Left,Title,Body} from 'native-base'
 import {DrawerActions} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import {Calendar} from 'react-native-calendars';
+import moment from 'moment';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -135,14 +136,14 @@ export default function StatScreen(props) {
                     <View style ={styles.statBox}>
                         <Icon name='bonfire' style={{color:'red'}}/>
                         <Text style = {styles.data}>{stats.completedTask}</Text>
-                        <Text style={styles.statName}>Completion Streak</Text>
+                        <Text style={styles.statName}>Completion Streak         (days)</Text>
                     </View>
                     <View style ={styles.statBox}>
-                        <Icon name='bar-chart' style={{color:'yellow'}}/>
+                        <Icon name='stats-chart' style={{color:'yellow'}}/>
                         <Text style = {styles.data}>
-                            {(stats.completeHistory * 100).toString().substring(0,3)} %
+                            {moment().diff(stats.trackingDate,'days') ? ((stats.completedTask / moment().diff(stats.trackingDate,'days')) *100).toString().substr(0,3): stats.completedTask} 
                         </Text>
-                        <Text style={styles.statName}>Tasks Completed Per Day</Text>
+                        <Text style={styles.statName}>Average Tasks     Completed</Text>
                     </View>
                 </View>
                 <View style ={styles.statistic}>
@@ -185,11 +186,11 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:'#232733',
         height:windowHeight*0.15,
-        borderRadius:5,
+        borderRadius:20,
         margin:10,
         justifyContent:'center',
         alignItems:'flex-start',
-        paddingLeft:40,
+        paddingLeft:30,
         paddingTop:10,
         paddingBottom:5,
     },
