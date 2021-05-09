@@ -7,16 +7,10 @@ import firestore from '@react-native-firebase/firestore';
 import Calendar from '../components/calendar/Calendar';
 import type Moment from 'moment';
 import Events from '../components/events/Events';
-import faker from 'faker';
 import Loader from '../components/Loader'
 import {MenuProvider} from 'react-native-popup-menu';
 
-// export type EventType = {
-//     date: Moment,
-//     title: string,
-//     description: string,
-//     image: string,
-//   };
+
 export type EventType = {
     ddl: Moment,
     task: string,
@@ -29,8 +23,6 @@ export type EventType = {
   };
 
 
-//   const filterEvents = (date: Moment): ?Array<EventType> =>
-//   FAKE_EVENTS.filter(event => event.date.isSame(date, 'day'));
 
 
 //function to check for incomplete tasks
@@ -41,14 +33,11 @@ function checkIncomplete(props) {
 		//for general tasks
 		if (doc.data().type === 'general') {
 			let hour = parseInt(moment().format('HH'));
-        		let min = parseInt(moment().format('mm'));
+        	let min = parseInt(moment().format('mm'));
 			let date = moment().startOf('day').add(hour,'h').add(min,'minute');
 			var currTime = moment(date).toDate()
 			currTime = firestore.Timestamp.fromDate(currTime)
-			//if the ddl is over and it's not completed
-			// console.log(doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted);
 			if (doc.data().ddl < currTime && !doc.data().complete && !doc.data().markAsIncompleted){
-				// console.log("enter if incomplete");
 				firestore().collection(props.route.params.user).doc(doc.id).update({markAsIncompleted:true});
 			
 				const statRef = firestore().collection('stats').doc(props.route.params.user);
@@ -102,7 +91,7 @@ function checkIncomplete(props) {
 						statRef.get().then((doc) => {
 							if (doc.exists) {
 								let comNo = doc.data().completedTask;
-        							let inNo = doc.data().incompletedTask + dayDiff;
+        						let inNo = doc.data().incompletedTask + dayDiff;
 								let history = comNo / (comNo + inNo);
 								statRef.update({incompletedTask:inNo, completeHistory:history});
     						}
@@ -114,8 +103,6 @@ function checkIncomplete(props) {
 }
  
 export default function TodayScreen(props) {
-    // console.log("Entered today screen");
-    // checkIncomplete(props)
 
     const [displayGeneral,setDisplayGeneral] = useState([]);
     const [displayDaily,setDisplayDaily] = useState([]);
