@@ -54,10 +54,10 @@ function checkIncomplete(props) {
 				const statRef = firestore().collection('stats').doc(props.route.params.user);
 				statRef.get().then((doc) => {
 					if (doc.exists) {
-        					let inNo = doc.data().incompletedTask + 1;
-						statRef.update({incompletedTask:inNo});
-						console.log("total incomplete tasks no. = " + inNo);
-						console.log(doc.id, " => ", doc.data().ddl);
+						let comNo = doc.data().completedTask;
+						let inNo = doc.data().incompletedTask + 1;
+						let history = comNo / (comNo + inNo);
+						statRef.update({incompletedTask:inNo, completeHistory:history});
     					}
 				});
 			
