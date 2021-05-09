@@ -6,34 +6,36 @@ import ShopScreen from '../screens/ShopScreen';
 import firestore from '@react-native-firebase/firestore'
 import {createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList} from '@react-navigation/drawer';
 import { AuthContext } from './AuthProvider';
-import { database } from 'faker';
-
+import moment from 'moment';
 const Drawer = createDrawerNavigator();
 
 
 export default function AppStack(props) {
 
     const {logout} = useContext(AuthContext);
-    const [tasks,setTasks] = useState(null)
-    const [stats,setStats] = useState(null)
+    const [trackingDate, setTrackingDate] = useState();
 
     useEffect(() => {
         let statRef = firestore().collection('stats').doc(props.user);
         statRef.get().then(doc=>{
-            if (!doc.exits){
+            if (!doc.exists){
                 statRef.set({
                     completeHistory:1,
                     completedTask:0,
                     incompletedTask:0,
-                    reward:0
+                    reward:0,
+                    trackingDate:firestore.Timestamp.fromDate(moment().toDate())
                 })
+            }
+            else{
+                setTrackingDate(doc.data().trackingDate)
             }
         })
     }, [])
 
     return (
         <>
-      
+      {trackingDate?
     <Drawer.Navigator drawerContent={props => {
         return (
             <DrawerContentScrollView>
@@ -42,12 +44,12 @@ export default function AppStack(props) {
             </DrawerContentScrollView>
         );
     }}>
-        <Drawer.Screen name="Home" component={HomeStack} initialParams={{user: props.user}} />
-        <Drawer.Screen name='Stats' component={StatScreen} initialParams={{user:props.user, stats:stats}} />
-	<Drawer.Screen name='Shop' component={ShopScreen} initialParams={{user:props.user, stats:stats}} />
+        <Drawer.Screen name="Task Manager" component={HomeStack} initialParams={{user: props.user}} />
+        <Drawer.Screen name='Your Stats' component={StatScreen} initialParams={{user:props.user, trackingDate:trackingDate}} />
+	<Drawer.Screen name='Shop' component={ShopScreen} initialParams={{user:props.user}} />
     </Drawer.Navigator>
-
-
+    :null
+    }
     </>
     )
 }

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import {Text,View, StyleSheet, SafeAreaView, StatusBar, Dimensions, Alert, FlatList, TouchableOpacity} from 'react-native';
+import {Text,View, StyleSheet, SafeAreaView, StatusBar, Dimensions, Alert } from 'react-native';
 import {Icon,Button,Container,Header,Content,Input,Item} from 'native-base';
+import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment-timezone';
 import firestore from '@react-native-firebase/firestore';
 import NotifService from '../components/notifications/NotifService';
-import RNPickerSelect from 'react-native-picker-select';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -247,35 +247,23 @@ const DATA = [
                         />
                 </Item>
 		        <Item>
-                <RNPickerSelect 
-                    useNativeAndroidPickerStyle={true}
-                    onValueChange={(value) => setTag(value)}
-                    items ={ [
-                        {
-                          label: "Workout",
-                          value: "Workout"
-                        },
-                        {
-                          label: "Academic",
-                          value: "Academic",
-                        },
-                        {
-                          label: "Entertainment",
-                          value: "Entertainment",
-                        },
-                        {
-                          label: "Health",
-                          value: "Health",
-                        },
-                      ]}
-                />
-      		     {/* <FlatList
-        		data={DATA}
-			    style={styles.item} 
-        		renderItem={renderItem}
-        		keyExtractor={(item) => item.id}
-        		extraData={selectedId}
-      			/> */}
+                <Picker
+                style={styles.picker}
+                selectedValue={tag}
+                enabled={true}
+                mide={'dialog'}
+                prompt={'Set Tag'}
+                onValueChange={(itemValue, itemIndex) =>
+                    setTag(itemValue)
+                }>
+                    <Picker.Item label="Health" value="Health" />
+                    <Picker.Item label="Academic" value="Academic" />
+                    <Picker.Item label="Workout" value="Workout" />
+                    <Picker.Item label="Project" value="Project" />
+                    <Picker.Item label="Work" value="Work" />
+                    <Picker.Item label="Habit" value="Habit" />
+                </Picker>
+      		  
     		    </Item>
 
                 {(props.route.params.type === 'daily') ? null:
@@ -361,4 +349,8 @@ const styles = StyleSheet.create({
     title: {
     	fontSize: 32,
     },
+    picker:{
+        flex:1,
+        color:"#E5E5F3"
+    }
 })
