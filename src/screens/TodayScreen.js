@@ -87,17 +87,26 @@ function checkIncomplete(props) {
   
 				// To calculate the no. of days between two dates
 				var dayDiff = timeDiff / (1000 * 3600 * 24);
-				//update task status
-				firestore().collection(props.route.params.user).doc(doc.id).update({markAsIncompleted:true, complete:false, ddl:newDdl});
-				const statRef = firestore().collection('stats').doc(props.route.params.user);
-				statRef.get().then((doc) => {
-					if (doc.exists) {
-						let comNo = doc.data().completedTask;
-        					let inNo = doc.data().incompletedTask + dayDiff;
-						let history = comNo / (comNo + inNo);
-						statRef.update({incompletedTask:inNo, completeHistory:history});
-    					}
-				});
+				//if the task is completed yesterday
+				if (dayDiff == 1 && doc().data.complete) {
+					firestore().collection(props.route.params.user).doc(doc.id).update({markAsIncompleted:false, complete:false, ddl:newDdl});
+					dayDiff = 0;
+				}
+
+				else {
+					firestore().collection(props.route.params.user).doc(doc.id).update({markAsIncompleted:false, complete:false, ddl:newDdl});
+				}
+				
+				firestore().collection(props.route.params.user).doc(doc.id).update({markAsIncompleted:false, complete:false, ddl:newDdl});
+					const statRef = firestore().collection('stats').doc(props.route.params.user);
+						statRef.get().then((doc) => {
+							if (doc.exists) {
+								let comNo = doc.data().completedTask;
+        							let inNo = doc.data().incompletedTask + dayDiff;
+								let history = comNo / (comNo + inNo);
+								statRef.update({incompletedTask:inNo, completeHistory:history});
+    						}
+					});
 			}
 		}
     	});
