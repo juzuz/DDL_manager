@@ -29,7 +29,7 @@ const options = [
     {icon:'search',label:"Search"},
     {icon:'heart',label:"Favorites"},
     {icon:'time',label:"Limited Time"},
-    {icon:'shuffle',label:"Suprise Me"},
+    {icon:'shuffle',label:"Surprise Me"},
     {icon:'wine', label:'Liquor'},
     {icon:'female',label:'Women Trending'},
     {icon:'male',label:'Male Trending'}
