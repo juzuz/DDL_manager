@@ -72,7 +72,7 @@ function checkIncomplete(props) {
 			//if the ddl is not at the same day
 			if (ddlDate !== todayDate){
 				// To calculate the time difference of two dates
-				var timeDiff = date2.getTime() - date1.getTime();
+				var timeDiff = today.getTime() - ddl.getTime();
   
 				// To calculate the no. of days between two dates
 				var dayDiff = timeDiff / (1000 * 3600 * 24);
