@@ -63,7 +63,7 @@ export default class MiniEvent extends Component {
     } = minitask;
     return (
         <View style = {complete?styles.minitaskContainerComplete:styles.minitaskContainerIncomplete}>
-            <Text style= {{color:'white', fontSize:14,textAlignVertical:'center',marginRight:220}}>
+            <Text style= {{color:'white', fontSize:14,textAlignVertical:'center',flex:1}}>
                 {minitask.task}
             </Text>
             <PopMenu user = {user} taskID = {taskID} minitaskID = {minitask.id}/>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   minitaskContainerIncomplete:{
       flex:1, 
       flexDirection:'row',
-      height:40,width:280,
+      // height:40,width:280,
       borderBottomWidth:1,
       borderBottomColor:'white'
     },
@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
         opacity:0.4,
         flex:1, 
         flexDirection:'row',
-        height:40,width:280,
         borderBottomWidth:1,
         borderBottomColor:'white'
       },

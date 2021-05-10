@@ -17,7 +17,6 @@ import { Icon, ListItem } from 'native-base';
 import Event from './Event';
 import type { EventType } from '../../screens/TodayScreen';
 import firestore from '@react-native-firebase/firestore';
-import { database } from 'faker';
 
 
 
@@ -38,7 +37,6 @@ export default class Events extends Component {
     const statRef = firestore().collection('stats').doc(user);
 
     let completionStatus = event.complete
-    console.log(completionStatus)
 
     if (!completionStatus){
       let reward = 0;
@@ -98,6 +96,10 @@ export default class Events extends Component {
       }
     })
   }
+
+
+
+
 
   componentWillUnmount = () => {
     this.unsubsribe();

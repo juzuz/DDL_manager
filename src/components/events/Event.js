@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     marginTop:15
   },
   menuOptions: {
-    padding: 80,
+    padding: 50,
     
   },
   menuContainer:{

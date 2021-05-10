@@ -115,6 +115,9 @@ export default function TodayScreen(props) {
         return a.ddl.toDate().getTime() - b.ddl.toDate().getTime()
     });
 
+
+
+
     const filterDailyEvents = (taskArray,date: Moment): ?Array<EventType> =>
     taskArray.filter(event => (event.type === 'daily'));
 
@@ -141,7 +144,7 @@ export default function TodayScreen(props) {
   
 
     const getTasks = async() => {
-        const userRef = firestore().collection(props.route.params.user);
+        const userRef = firestore().collection(props.route.params.user).orderBy('ddl');
         userRef.onSnapshot((snapshot)=>{
             if(snapshot){
                 let newTasks = snapshot.docs.map((doc)=>({
@@ -149,11 +152,9 @@ export default function TodayScreen(props) {
                     ...doc.data(),
                    
                 }))
-
-
                 setTasks(formatTasks(newTasks))
-                setDisplayGeneral(filterGeneralEvents(formatTasks(newTasks),moment()))
-                setDisplayDaily(filterDailyEvents(formatTasks(newTasks),moment()))
+                setDisplayGeneral(filterGeneralEvents(formatTasks(newTasks),selectedDate))
+                setDisplayDaily(filterDailyEvents(formatTasks(newTasks),selectedDate))
             }
         })
     }
@@ -166,13 +167,18 @@ export default function TodayScreen(props) {
     }, [props.route.params.user])
 
     useEffect(()=>{
+
         setLoading(true);
         checkIncomplete(props)
 
         if(props.route.params.user){
             getTasks();
         }
+        
     },[])
+
+  
+    
 
     const pressHandler = () => {
         props.navigation.navigate("Task");
