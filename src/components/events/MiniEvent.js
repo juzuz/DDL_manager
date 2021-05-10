@@ -41,11 +41,9 @@ const PopMenu = (props) => (
       </MenuTrigger>
       <MenuOptions customStyles = {{optionText: styles.text}}>
         <MenuOption value ={0} text = "Toggle">
-            {/* <Text style={{marginTop:3,marginBottom:3,textAlign:'center',textAlignVertical:'center'}}>Complete</Text> */}
         </MenuOption>
         <View style={styles.divider} />
         <MenuOption value = {1} text ="Delete">
-            {/* <Text style={{marginTop:3,marginBottom:3,textAlign:'center',textAlignVertical:'center'}}>Delete</Text> */}
         </MenuOption>        
       </MenuOptions>
       
@@ -54,6 +52,8 @@ const PopMenu = (props) => (
 
 export default class MiniEvent extends Component {
 
+
+
   render() {
     const { minitask ,user, taskID} = this.props;
     const {
@@ -61,6 +61,7 @@ export default class MiniEvent extends Component {
       id,
       complete
     } = minitask;
+
     return (
         <View style = {complete?styles.minitaskContainerComplete:styles.minitaskContainerIncomplete}>
             <Text style= {{color:'white', fontSize:14,textAlignVertical:'center',flex:1}}>

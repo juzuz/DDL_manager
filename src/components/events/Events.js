@@ -11,7 +11,7 @@ import {
   TouchableHighlight,
   LogBox
 } from 'react-native';
-import moment from "moment";
+import moment, { min } from "moment";
 import {calcReward} from '../reward/reward';
 import { Icon, ListItem } from 'native-base';
 import Event from './Event';
@@ -95,6 +95,8 @@ export default class Events extends Component {
         this.setState({stats:doc.data()})
       }
     })
+
+    
   }
 
   componentWillUnmount = () => {
@@ -111,7 +113,7 @@ export default class Events extends Component {
   }
 
   render() {
-    const { events } = this.props;
+    let { events } = this.props;
     const {user} = this.props;
     const {selectedDate} = this.props;
     const {leftActionActivated,rightActionActivated} = this.state
@@ -155,7 +157,7 @@ export default class Events extends Component {
             onRightActionRelease={() => this.rightSwipeHandler(user,event)}
             onRightActionDeactivate={() => this.setState({rightActionActivated: false})}
             >
-              <Event event={event} key={index} selectedDate = {selectedDate} user = {user}/>
+              <Event event={event} key={index} selectedDate = {selectedDate} user = {user} />
             </Swipeable>)}
         </ScrollView>
       </View>
