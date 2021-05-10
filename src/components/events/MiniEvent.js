@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
   minitaskContainerIncomplete:{
       flex:1, 
       flexDirection:'row',
-      // height:40,width:280,
       borderBottomWidth:1,
       borderBottomColor:'white'
     },
@@ -95,9 +94,7 @@ const styles = StyleSheet.create({
       color:'white',
       justifyContent:'center'
   },
-  textContainer: {
-    flex:1,
-  },
+  
   menuTrigger: {
     justifyContent:'center',
     alignItems:'center',
@@ -109,11 +106,7 @@ const styles = StyleSheet.create({
     textAlignVertical:'center',
     textAlign:'center'
   },
-  title: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
+  
   divider: {
     marginVertical: 5,
     marginHorizontal: 2,

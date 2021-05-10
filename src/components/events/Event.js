@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import {
-  Image,
   StyleSheet,
   Text,
   View,
@@ -82,8 +81,8 @@ export default class Event extends Component {
     } = event;
 
     const {toggle} = this.state
-    const empty = minitask?false:true;
-
+    const empty = minitask && minitask.length?false:true;
+    
     const toggleToShow = () => {
       if (empty){
         return styles.toggleDownOpac

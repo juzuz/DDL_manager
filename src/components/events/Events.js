@@ -11,9 +11,9 @@ import {
   TouchableHighlight,
   LogBox
 } from 'react-native';
-import moment, { min } from "moment";
+import moment from "moment";
 import {calcReward} from '../reward/reward';
-import { Icon, ListItem } from 'native-base';
+import { Icon } from 'native-base';
 import Event from './Event';
 import type { EventType } from '../../screens/TodayScreen';
 import firestore from '@react-native-firebase/firestore';
@@ -68,7 +68,7 @@ export default class Events extends Component {
           totalComp === 0 ? ch =1: ch = totalComp/(totalComp + sH.incompletedTask);
          
 
-          statRef.update({completedTask:totalComp,reward:sH.reward - reward, completeHistory:cH})
+          statRef.update({completedTask:totalComp,reward:sH.reward - reward, completeHistory:ch})
           if(event.type==='daily'){
             taskRef.update({complete:!completionStatus,reward:reward})
           }
@@ -190,7 +190,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 18,
     backgroundColor:'#9bf542',
-    // marginBottom:5,
     borderBottomWidth:1,
     borderBottomColor:'white'
   },
