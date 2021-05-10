@@ -110,10 +110,10 @@ export default function TodayScreen(props) {
     const [tasks,setTasks] = useState([]);
     const [selectedDate,setSelectedDate] = useState(moment());
 
-    const filterGeneralEvents = (taskArray,date: Moment): ?Array<EventType> => 
-    taskArray.filter(event => (moment(event.ddl).isSame(date, 'day') && event.type === 'general')).sort((a,b) => {
-        return a.ddl.toDate().getTime() - b.ddl.toDate().getTime()
-    });
+    // const filterGeneralEvents = (taskArray,date: Moment): ?Array<EventType> => 
+    // taskArray.filter(event => (moment(event.ddl).isSame(date, 'day') && event.type === 'general')).sort((a,b) => {
+    //     return a.ddl.toDate().getTime() - b.ddl.toDate().getTime()
+    // });
 
 
 
@@ -123,7 +123,7 @@ export default function TodayScreen(props) {
 
     function onSelectDate (date: Moment)  {
         setSelectedDate(date);
-        setDisplayGeneral(filterGeneralEvents(tasks,date));
+        // setDisplayGeneral(tasks);
         setDisplayDaily(filterDailyEvents(tasks,date));
       };
 
@@ -153,7 +153,7 @@ export default function TodayScreen(props) {
                    
                 }))
                 setTasks(formatTasks(newTasks))
-                setDisplayGeneral(filterGeneralEvents(formatTasks(newTasks),selectedDate))
+                setDisplayGeneral((formatTasks(newTasks)))
                 setDisplayDaily(filterDailyEvents(formatTasks(newTasks),selectedDate))
             }
         })
@@ -210,7 +210,7 @@ export default function TodayScreen(props) {
                     <View style = {styles.divider}/>
                     <Content contentContainerStyle={{
                     }}>
-                        <Events events={displayGeneral} user = {props.route.params.user} selectedDate={ selectedDate}/>
+                        <Events events={displayGeneral} usage="general" user = {props.route.params.user} selectedDate={selectedDate}/>
                     </Content>
                 </Container>
             </Container>
@@ -221,7 +221,7 @@ export default function TodayScreen(props) {
                     <View style = {styles.divider}/>
 
                     <Content>
-                        <Events events={displayDaily} user = {props.route.params.user} selectedDate={selectedDate}/>
+                        <Events events={displayDaily} usage="daily" user = {props.route.params.user} selectedDate={selectedDate}/>
                     </Content>
                 </Container>
             </Container>

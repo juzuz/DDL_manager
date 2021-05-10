@@ -83,6 +83,7 @@ export default class Event extends Component {
         this.setState({minitask:minitask})
       }
     })
+
   } 
 
 
@@ -100,6 +101,7 @@ export default class Event extends Component {
     } = event;
     const {minitask, toggle} = this.state;
     const empty = minitask.length?false:true;
+    console.log(event,minitask)
 
     const toggleToShow = () => {
       if (empty){

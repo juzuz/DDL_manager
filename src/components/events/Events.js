@@ -97,12 +97,17 @@ export default class Events extends Component {
     })
   }
 
-
-
-
-
   componentWillUnmount = () => {
     this.unsubsribe();
+  }
+
+
+
+  filterChoice = (taskArray,date) =>{
+    if(this.props.usage == 'general'){
+      return taskArray.filter(event => (event.type === 'general' &&  moment(event.ddl).isSame(date, 'day')))
+    }
+    return taskArray
   }
 
   render() {
@@ -128,11 +133,10 @@ export default class Events extends Component {
                           }
                           </View>
 
-
     return (
       <View style={styles.container}>
         <ScrollView>
-          {events && events.map((event, index) =>
+          {events && this.filterChoice(events,selectedDate).map((event, index) =>
             <Swipeable 
             disable = {(event.type === 'daily' && !moment().isSame(selectedDate,'day')) ? true:false}
             leftActionActivationDistance ={150}
