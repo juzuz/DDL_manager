@@ -256,8 +256,8 @@ export default function NewTaskScreen(props) {
                 {(props.route.params.type === 'daily') ? null:
                 <Item style={{borderBottomWidth:0, marginTop:10}}>
                     <View style = {{flex:1, flexDirection:'row'}}>
-                        <View style = {{backgroundColor:'#495867', justifyContent:'center'}}>
-                            <Text style={{marginRight:10, marginLeft:10, color:'white',fontSize:18,fontWeight:'bold'}}>{dateString}</Text>
+                        <View style = {{flex:1,backgroundColor:'#495867', justifyContent:'center'}}>
+                            <Text style={{marginRight:10, marginLeft:10, color:'white',fontSize:16,fontWeight:'bold'}}>{dateString}</Text>
                         </View>
                         <Button style ={{marginLeft:10 ,backgroundColor:'orange'}} onPress ={showDatePicker}>
                             <Icon name ='calendar' />

@@ -135,7 +135,7 @@ export default function StatScreen(props) {
                 <View style={styles.statContainer}>
                     <View style ={styles.statBox}>
                         <Icon name='bonfire' style={{color:'red'}}/>
-                        <Text style = {styles.data}>{stats.completedTask}</Text>
+                        <Text style = {styles.data}>{moment().diff(stats.trackingDate,'days') + 1}</Text>
                         <Text style={styles.statName}>Completion Streak         (days)</Text>
                     </View>
                     <View style ={styles.statBox}>
