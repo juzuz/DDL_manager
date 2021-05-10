@@ -9,6 +9,7 @@ import type Moment from 'moment';
 import Events from '../components/events/Events';
 import Loader from '../components/Loader'
 import {MenuProvider} from 'react-native-popup-menu';
+import { set } from 'react-native-reanimated';
 
 
 export type EventType = {
@@ -19,7 +20,8 @@ export type EventType = {
     startTime: Moment,
     tag:string,
     type:string,
-    complete: Boolean
+    complete: Boolean,
+    minitask:Object
   };
 
 
@@ -110,12 +112,10 @@ export default function TodayScreen(props) {
     const [tasks,setTasks] = useState([]);
     const [selectedDate,setSelectedDate] = useState(moment());
 
-    const filterGeneralEvents = (taskArray,date: Moment): ?Array<EventType> => 
-    taskArray.filter(event => (moment(event.ddl).isSame(date, 'day') && event.type === 'general')).sort((a,b) => {
-        return a.ddl.toDate().getTime() - b.ddl.toDate().getTime()
-    });
-
-
+    // const filterGeneralEvents = (taskArray,date: Moment): ?Array<EventType> => 
+    // taskArray.filter(event => (moment(event.ddl).isSame(date, 'day') && event.type === 'general')).sort((a,b) => {
+    //     return a.ddl.toDate().getTime() - b.ddl.toDate().getTime()
+    // });
 
 
     const filterDailyEvents = (taskArray,date: Moment): ?Array<EventType> =>
@@ -123,7 +123,7 @@ export default function TodayScreen(props) {
 
     function onSelectDate (date: Moment)  {
         setSelectedDate(date);
-        setDisplayGeneral(filterGeneralEvents(tasks,date));
+        // setDisplayGeneral(tasks);
         setDisplayDaily(filterDailyEvents(tasks,date));
       };
 
@@ -137,7 +137,8 @@ export default function TodayScreen(props) {
             type: task.type,
             importanceScore: task.importantScore,
             startTime: moment(task.startTime.toDate()),
-            complete: task.complete
+            complete: task.complete,
+            minitask: task.minitask
           }));
     }
 
@@ -150,11 +151,29 @@ export default function TodayScreen(props) {
                 let newTasks = snapshot.docs.map((doc)=>({
                     id:doc.id,
                     ...doc.data(),
-                   
                 }))
-                setTasks(formatTasks(newTasks))
-                setDisplayGeneral(filterGeneralEvents(formatTasks(newTasks),selectedDate))
-                setDisplayDaily(filterDailyEvents(formatTasks(newTasks),selectedDate))
+
+                newTasks.forEach((task,index)=> {
+                    if(task.type ==="general"){
+                        const subRef = firestore().collection(props.route.params.user).doc(task.id).collection('subtasks');
+                        subRef.onSnapshot((snap) => {
+                            if(snap){
+                                let minitask = snap.docs.map((doc1)=>({
+                                    id: doc1.id,
+                                    ...doc1.data()
+                                }))
+                                newTasks[index].minitask = minitask
+
+                                setTasks(formatTasks(newTasks))
+                                setDisplayGeneral((formatTasks(newTasks)))
+                                setDisplayDaily(filterDailyEvents(formatTasks(newTasks),selectedDate))
+                            }
+                        })
+                    }
+                })
+
+
+                
             }
         })
     }
@@ -177,6 +196,7 @@ export default function TodayScreen(props) {
         
     },[])
 
+
   
     
 
@@ -186,7 +206,7 @@ export default function TodayScreen(props) {
    
     return (
         <>
-        {loading ? <Loader visible ={loading}/>: <>
+        {loading   ? <Loader visible ={loading}/>: <>
         <MenuProvider>
         <StatusBar hidden={true}></StatusBar>
         <Container style={styles.container}>
@@ -210,7 +230,7 @@ export default function TodayScreen(props) {
                     <View style = {styles.divider}/>
                     <Content contentContainerStyle={{
                     }}>
-                        <Events events={displayGeneral} user = {props.route.params.user} selectedDate={ selectedDate}/>
+                        <Events events={displayGeneral} usage="general" user = {props.route.params.user} selectedDate={selectedDate}/>
                     </Content>
                 </Container>
             </Container>
@@ -221,7 +241,7 @@ export default function TodayScreen(props) {
                     <View style = {styles.divider}/>
 
                     <Content>
-                        <Events events={displayDaily} user = {props.route.params.user} selectedDate={selectedDate}/>
+                        <Events events={displayDaily} usage="daily" user = {props.route.params.user} selectedDate={selectedDate}/>
                     </Content>
                 </Container>
             </Container>

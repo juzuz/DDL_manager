@@ -11,7 +11,7 @@ import {
   TouchableHighlight,
   LogBox
 } from 'react-native';
-import moment from "moment";
+import moment, { min } from "moment";
 import {calcReward} from '../reward/reward';
 import { Icon, ListItem } from 'native-base';
 import Event from './Event';
@@ -95,18 +95,25 @@ export default class Events extends Component {
         this.setState({stats:doc.data()})
       }
     })
+
+    
   }
-
-
-
-
 
   componentWillUnmount = () => {
     this.unsubsribe();
   }
 
+
+
+  filterChoice = (taskArray,date) =>{
+    if(this.props.usage == 'general'){
+      return taskArray.filter(event => (event.type === 'general' &&  moment(event.ddl).isSame(date, 'day')))
+    }
+    return taskArray
+  }
+
   render() {
-    const { events } = this.props;
+    let { events } = this.props;
     const {user} = this.props;
     const {selectedDate} = this.props;
     const {leftActionActivated,rightActionActivated} = this.state
@@ -128,11 +135,10 @@ export default class Events extends Component {
                           }
                           </View>
 
-
     return (
       <View style={styles.container}>
         <ScrollView>
-          {events && events.map((event, index) =>
+          {events && this.filterChoice(events,selectedDate).map((event, index) =>
             <Swipeable 
             disable = {(event.type === 'daily' && !moment().isSame(selectedDate,'day')) ? true:false}
             leftActionActivationDistance ={150}
@@ -151,7 +157,7 @@ export default class Events extends Component {
             onRightActionRelease={() => this.rightSwipeHandler(user,event)}
             onRightActionDeactivate={() => this.setState({rightActionActivated: false})}
             >
-              <Event event={event} key={index} selectedDate = {selectedDate} user = {user}/>
+              <Event event={event} key={index} selectedDate = {selectedDate} user = {user} />
             </Swipeable>)}
         </ScrollView>
       </View>

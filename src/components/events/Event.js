@@ -56,7 +56,6 @@ const PopMenu = (props) => (
 export default class Event extends Component {
 
   state = {
-    minitask : {},
     toggle :false,
     newtaskname:""
   }
@@ -68,22 +67,6 @@ export default class Event extends Component {
     this.setState({newtaskname:val})
   }
 
-  componentDidMount(){
-    const subRef = firestore().collection(this.props.user).doc(this.props.event.id).collection('subtasks');
-    subRef.onSnapshot(snapshot=>{
-      if(snapshot){
-        var minitask = snapshot.docs.map((doc) => ({
-          id:doc.id,
-          ...doc.data()
-        }))
-
-        minitask = minitask.sort((a,b) => {
-          return a.creationDate.toDate().getTime() - b.creationDate.toDate().getTime()
-        });
-        this.setState({minitask:minitask})
-      }
-    })
-  } 
 
 
   render() {
@@ -92,14 +75,14 @@ export default class Event extends Component {
       ddl,
       task,
       id,
-      importanceScore,
-      startTime,
       tag,
       type,
-      complete
+      complete,
+      minitask
     } = event;
-    const {minitask, toggle} = this.state;
-    const empty = minitask.length?false:true;
+
+    const {toggle} = this.state
+    const empty = minitask?false:true;
 
     const toggleToShow = () => {
       if (empty){
@@ -158,8 +141,6 @@ export default class Event extends Component {
           }
         </View>
       </View>
-    //   }
-    // </>
     );
   }
 }
